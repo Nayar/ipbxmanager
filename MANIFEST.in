@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include ipbxmanager *.css
+recursive-include ipbxmanager *.csv
+recursive-include ipbxmanager *.html
+recursive-include ipbxmanager *.ico
+recursive-include ipbxmanager *.js
+recursive-include ipbxmanager *.json
+recursive-include ipbxmanager *.md
+recursive-include ipbxmanager *.png
+recursive-include ipbxmanager *.py
+recursive-include ipbxmanager *.svg
+recursive-include ipbxmanager *.txt
+recursive-exclude ipbxmanager *.pyc
