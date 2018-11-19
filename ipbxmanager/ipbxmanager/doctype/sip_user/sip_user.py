@@ -5,8 +5,6 @@
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
-import json
-from pprint import pprint
 
 class SIPUser(Document):
     def validate(self):
