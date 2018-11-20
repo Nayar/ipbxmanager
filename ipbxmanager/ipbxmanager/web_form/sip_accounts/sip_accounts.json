@@ -18,7 +18,7 @@
  "is_standard": 1,
  "login_required": 1,
  "max_attachment_size": 0,
- "modified": "2018-11-20 13:32:52.508793",
+ "modified": "2018-11-20 14:05:38.905951",
  "modified_by": "Administrator",
  "module": "Ipbxmanager",
  "name": "sip-accounts",
@@ -35,7 +35,7 @@
  "title": "SIP Company",
  "web_form_fields": [
   {
-   "allow_read_on_all_link_options": 0,
+   "allow_read_on_all_link_options": 1,
    "fieldname": "customer",
    "fieldtype": "Link",
    "hidden": 0,
@@ -43,7 +43,7 @@
    "max_length": 0,
    "max_value": 0,
    "options": "Customer",
-   "read_only": 1,
+   "read_only": 0,
    "reqd": 1,
    "show_in_filter": 0
   },
