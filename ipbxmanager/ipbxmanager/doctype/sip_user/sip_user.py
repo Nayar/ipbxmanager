@@ -17,7 +17,8 @@ class SIPUser(Document):
             "doctype": "User",
             "email" : self.name,
             "first_name" : self.sip_user_id,
-            "last_name" : company.domain
+            "last_name" : company.domain,
+            "new_password" : '1234a@A!'
         })
         doc.insert()
 
@@ -26,6 +27,7 @@ class SIPUser(Document):
         contact = frappe.get_doc("Contact",user.full_name)
         contact.delete()
         user.delete()
+        pass
 
 
 
