@@ -30,4 +30,3 @@ class SIPUser(Document):
         pass
 
 
-
