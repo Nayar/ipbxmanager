@@ -1,5 +1,5 @@
 {
- "accept_payment": 1,
+ "accept_payment": 0,
  "allow_comments": 0,
  "allow_delete": 1,
  "allow_edit": 1,
@@ -9,6 +9,7 @@
  "amount": 500.0,
  "amount_based_on_field": 0,
  "breadcrumbs": "",
+ "client_script": "frappe.web_form.set_value('company', 'HOhohoho')",
  "creation": "2018-11-19 10:03:08.081312",
  "currency": "MUR",
  "doc_type": "SIP Company",
@@ -18,7 +19,7 @@
  "is_standard": 1,
  "login_required": 1,
  "max_attachment_size": 0,
- "modified": "2018-11-20 14:14:50.553346",
+ "modified": "2018-11-20 20:19:07.272995",
  "modified_by": "Administrator",
  "module": "Ipbxmanager",
  "name": "sip-accounts",
@@ -35,20 +36,7 @@
  "title": "SIP Company",
  "web_form_fields": [
   {
-   "allow_read_on_all_link_options": 1,
-   "fieldname": "customer",
-   "fieldtype": "Link",
-   "hidden": 0,
-   "label": "Customer",
-   "max_length": 0,
-   "max_value": 0,
-   "options": "Customer",
-   "read_only": 0,
-   "reqd": 1,
-   "show_in_filter": 0
-  },
-  {
-   "allow_read_on_all_link_options": 1,
+   "allow_read_on_all_link_options": 0,
    "fieldname": "company",
    "fieldtype": "Link",
    "hidden": 0,
@@ -82,6 +70,19 @@
    "max_length": 0,
    "max_value": 0,
    "options": "SIP User",
+   "read_only": 0,
+   "reqd": 0,
+   "show_in_filter": 0
+  },
+  {
+   "allow_read_on_all_link_options": 0,
+   "fieldname": "sip_ivrs",
+   "fieldtype": "Table",
+   "hidden": 0,
+   "label": "sip_ivrs",
+   "max_length": 0,
+   "max_value": 0,
+   "options": "SIP IVR",
    "read_only": 0,
    "reqd": 0,
    "show_in_filter": 0
