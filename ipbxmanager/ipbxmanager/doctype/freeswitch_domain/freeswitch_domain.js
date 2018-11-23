@@ -13,6 +13,7 @@ function check_sip_exists(sip_users,sip_user_id){
 var i = 1;
 frappe.ui.form.on('Freeswitch Domain', {
 	refresh: function(frm) {
+
         frm.add_custom_button(__("Generate Users"), function(){
             console.log(frappe)
             console.log(frm)
@@ -39,6 +40,14 @@ frappe.ui.form.on('Freeswitch Domain', {
                 '',
                 'Generate Users'
             )
+        });
+        
+        frm.set_query('SIP User', function() {
+			return {
+				filters: {
+					"shipping_rule_type": "Selling"
+				}
+			};
         });
 	}
 });
