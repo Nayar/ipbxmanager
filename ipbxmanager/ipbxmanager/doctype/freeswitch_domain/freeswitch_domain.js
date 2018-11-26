@@ -18,20 +18,24 @@ frappe.ui.form.on('Freeswitch Domain', {
             console.log(frappe)
             console.log(frm)
             frappe.prompt([
-                    {'fieldname': 'no_of_users_to_generate', 'fieldtype': 'Int', 'label': 'No of users to generate', 'reqd': 1}  
+                    //{'fieldname': 'no_of_users_to_generate', 'fieldtype': 'Int', 'label': 'No of users to generate', 'reqd': 1}  
+                    {'fieldname': 'start_number', 'fieldtype': 'Int', 'label': 'Start Number', 'reqd': 1} ,
+                    {'fieldname': 'end_number', 'fieldtype': 'Int', 'label': 'Start Number', 'reqd': 1}  
                 ],
                 function(values){
                     show_alert(values, 5);
                     console.log(values)
                     var i = 0;
-                    while (i < values.no_of_users_to_generate) {
-                        var new_sip_user_id = 1000 + i
+                    var new_sip_user_id = values.start_number
+                    while (new_sip_user_id <= values.end_number) {
+                        //new_sip_user_id = start_number + i
                         if(check_sip_exists(frm.doc.sip_users,new_sip_user_id) == false){
                             var newrow = frappe.model.add_child(frm.doc, "SIP User", "sip_users");
-                            newrow.sip_user_id = String(1000 + i)
+                            newrow.sip_user_id = String(new_sip_user_id)
                         }
                         else {
-                            values.no_of_users_to_generate++
+                            //values.no_of_users_to_generate++
+                            new_sip_user_id++
                         }
                         i++
                     }
