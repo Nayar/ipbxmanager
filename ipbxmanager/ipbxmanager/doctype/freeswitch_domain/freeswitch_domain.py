@@ -6,6 +6,16 @@ from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
 
+def gen_user_xml(i):
+	return """<domain name="%s">
+<user id="%s">
+	<params>
+	<param name="reverse-auth-user" value="%s" />
+	<param name="reverse-auth-pass" value="1234" />
+	</params>
+</user>
+</domain>""" % (i,i,i)
+
 class FreeswitchDomain(Document):
 	def deploy(self):
 		import base64
@@ -13,7 +23,8 @@ class FreeswitchDomain(Document):
 		print("Deploying...")
 
 		key = paramiko.RSAKey.from_private_key_file("/home/frappe/.ssh/id_rsa")
-		client = paramiko.SSHClient()
+		self.client = paramiko.SSHClient()
+		client = self.client
 		client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 		client.connect('10.65.35.52', username='root')
 		stdin, stdout, stderr = client.exec_command('mkdir -p /etc/freeswitch/directory/' + self.sip_domain)
@@ -21,7 +32,7 @@ class FreeswitchDomain(Document):
 			print('... ' + line.strip('\n'))
 		for line in stderr:
 			print('... ' + line.strip('\n'))
-		client.close()
+		#client.close()
 		self.deploy_sip_users()
 		pass
 	
@@ -29,6 +40,14 @@ class FreeswitchDomain(Document):
 		users=frappe.get_all('SIP User', filters={'sip_domain': self.sip_domain}, fields=['name','sip_user_id'])
 		for user in users:
 			print(user)
+			print(gen_user_xml(user.sip_user_id))
+			stdin, stdout, stderr = self.client.exec_command("echo '" + gen_user_xml(user.sip_user_id) + "' > /etc/freeswitch/directory/%s/%s.xml " % (self.sip_domain,user.sip_user_id))
+			for line in stdout:
+				print('... ' + line.strip('\n'))
+			for line in stderr:
+				print('... ' + line.strip('\n'))
+		self.client.close()
+			
 		print('wowo')
 		
 	def save(self):
