@@ -21,7 +21,7 @@ class FreeswitchDomain(Document):
 						"sip_extension": str(d.sip_group_extension),
 						"freeswitch_domain" : self.sip_domain
 					})
-                    doc.insert()
+					doc.insert()
 				d.sip_group = self.sip_domain + '-' + d.sip_group_extension
 		super(FreeswitchDomain, self).save()
 		
