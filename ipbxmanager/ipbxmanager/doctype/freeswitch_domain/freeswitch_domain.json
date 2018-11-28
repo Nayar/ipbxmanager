@@ -10,7 +10,7 @@
  "custom": 0,
  "docstatus": 0,
  "doctype": "DocType",
- "document_type": "",
+ "document_type": "Document",
  "editable_grid": 1,
  "engine": "InnoDB",
  "fields": [
@@ -223,7 +223,7 @@
  "issingle": 0,
  "istable": 0,
  "max_attachments": 0,
- "modified": "2018-11-28 15:14:33.458469",
+ "modified": "2018-11-28 16:43:00.637212",
  "modified_by": "Administrator",
  "module": "Ipbxmanager",
  "name": "Freeswitch Domain",
