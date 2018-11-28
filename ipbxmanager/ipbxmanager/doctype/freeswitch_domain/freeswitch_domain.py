@@ -9,13 +9,22 @@ from frappe.model.document import Document
 class FreeswitchDomain(Document):
 	def save(self):
 		import pprint
-		pprint.pprint(vars(self))
-
+		#pprint.pprint(vars(self))
 		for d in self.get_all_children():
-			if(d.doctype != 'SIP User'):
-				continue
-			pprint.pprint(vars(d))
-			print(d.sip_user_id)
-			print(self.sip_domain)
-			d.sip_email = d.sip_user_id + '@' + self.sip_domain
+			if(d.doctype == 'SIP User'):
+				d.sip_email = d.sip_user_id + '@' + self.sip_domain
+				
+			if(d.doctype == 'SIP Group Child'):
+				if not frappe.db.exists("SIP Group", self.sip_domain + '-' + d.sip_group_extension):
+					doc1 = frappe.get_doc({
+						"doctype": "SIP Group",
+						"sip_extension": str(d.sip_group_extension),
+						"freeswitch_domain" : self.sip_domain
+					})
+					print(d.sip_group_extension)
+					print(self.sip_domain)
+					print(doc1.insert())
+					print('ici la ein')
+				d.sip_group = self.sip_domain + '-' + d.sip_group_extension
 		super(FreeswitchDomain, self).save()
+		
