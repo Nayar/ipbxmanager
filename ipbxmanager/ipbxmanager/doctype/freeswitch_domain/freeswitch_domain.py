@@ -16,11 +16,12 @@ class FreeswitchDomain(Document):
 				
 			if(d.doctype == 'SIP Group Child'):
 				if not frappe.db.exists("SIP Group", self.sip_domain + '-' + d.sip_group_extension):
-					doc1 = frappe.get_doc({
+					doc = frappe.get_doc({
 						"doctype": "SIP Group",
 						"sip_extension": str(d.sip_group_extension),
 						"freeswitch_domain" : self.sip_domain
 					})
+                    doc.insert()
 				d.sip_group = self.sip_domain + '-' + d.sip_group_extension
 		super(FreeswitchDomain, self).save()
 		
