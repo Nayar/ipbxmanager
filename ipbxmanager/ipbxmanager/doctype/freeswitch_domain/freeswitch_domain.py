@@ -7,6 +7,21 @@ import frappe
 from frappe.model.document import Document
 
 class FreeswitchDomain(Document):
+	def deploy(self):
+		import base64
+		import paramiko
+
+		key = paramiko.RSAKey.from_private_key_file("/home/frappe/.ssh/id_rsa")
+		client = paramiko.SSHClient()
+		client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+		client.connect('10.65.35.52', username='root')
+		stdin, stdout, stderr = client.exec_command('ls')
+		for line in stdout:
+			print('... ' + line.strip('\n'))
+		client.close()
+		
+		pass
+	
 	def save(self):
 		import pprint
 		#pprint.pprint(vars(self))
