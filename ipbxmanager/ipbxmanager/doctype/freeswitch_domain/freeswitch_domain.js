@@ -30,7 +30,7 @@ frappe.ui.form.on('Freeswitch Domain', {
                     while (new_sip_user_id <= values.end_number) {
                         //new_sip_user_id = start_number + i
                         if(check_sip_exists(frm.doc.sip_users,new_sip_user_id) == false){
-                            var newrow = frappe.model.add_child(frm.doc, "SIP User", "sip_users");
+                            var newrow = frappe.model.add_child(frm.doc, "SIP User Child", "sip_users");
                             newrow.sip_user_id = String(new_sip_user_id)
                         }
                         else {

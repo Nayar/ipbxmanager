@@ -8,25 +8,27 @@ from frappe.model.document import Document
 
 class SIPUser(Document):
     def validate(self):
-        company = frappe.get_doc("Company",self.company)
-        self.name = self.sip_user_id + '@' + company.domain
+        #company = frappe.get_doc("Company",self.company)
+        #self.name = self.sip_user_id + '@' + company.domain
+        pass
 
     def on_update(self):
-        company = frappe.get_doc("Company",self.company)
-        doc = frappe.get_doc({
-            "doctype": "User",
-            "email" : self.name,
-            "first_name" : self.sip_user_id,
-            "last_name" : company.domain,
-            "new_password" : '1234a@A!'
-        })
-        doc.insert()
+        #company = frappe.get_doc("Company",self.company)
+        #doc = frappe.get_doc({
+            #"doctype": "User",
+            #"email" : self.name,
+            #"first_name" : self.sip_user_id,
+            #"last_name" : company.domain,
+            #"new_password" : '1234a@A!'
+        #})
+        #doc.insert()
+        pass
 
     def on_trash(self):
-        user = frappe.get_doc("User",self.name)
-        contact = frappe.get_doc("Contact",user.full_name)
-        contact.delete()
-        user.delete()
+        #user = frappe.get_doc("User",self.name)
+        #contact = frappe.get_doc("Contact",user.full_name)
+        #contact.delete()
+        #user.delete()
         pass
 
 
