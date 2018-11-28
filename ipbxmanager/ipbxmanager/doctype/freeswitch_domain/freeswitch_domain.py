@@ -6,6 +6,17 @@ from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
 
+def ssh_command(cmd):
+	import base64
+	import paramiko
+	key = paramiko.RSAKey.from_private_key_file("/home/frappe/.ssh/id_rsa")
+	client = paramiko.SSHClient()
+	client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+	client.connect('10.65.35.52', username='root')
+	stdin, stdout, stderr = client.exec_command(cmd)
+	client.close()
+	return stdin, stdout, stderr
+
 def gen_user_xml(i):
 	return """<domain name="%s">
 <user id="%s">
@@ -18,22 +29,16 @@ def gen_user_xml(i):
 
 class FreeswitchDomain(Document):
 	def deploy(self):
-		import base64
-		import paramiko
-		print("Deploying...")
 
-		key = paramiko.RSAKey.from_private_key_file("/home/frappe/.ssh/id_rsa")
-		self.client = paramiko.SSHClient()
-		client = self.client
-		client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-		client.connect('10.65.35.52', username='root')
-		stdin, stdout, stderr = client.exec_command('mkdir -p /etc/freeswitch/directory/' + self.sip_domain)
+		print("Deploying...")
+		stdin, stdout, stderr = ssh_command('rm -rf /etc/freeswitch/directory/' + self.sip_domain)
+		stdin, stdout, stderr = ssh_command('mkdir -p /etc/freeswitch/directory/' + self.sip_domain)
 		for line in stdout:
 			print('... ' + line.strip('\n'))
 		for line in stderr:
 			print('... ' + line.strip('\n'))
-		#client.close()
 		self.deploy_sip_users()
+		ssh_command('systemctl restart freeswitch')
 		pass
 	
 	def deploy_sip_users(self):
@@ -41,12 +46,11 @@ class FreeswitchDomain(Document):
 		for user in users:
 			print(user)
 			print(gen_user_xml(user.sip_user_id))
-			stdin, stdout, stderr = self.client.exec_command("echo '" + gen_user_xml(user.sip_user_id) + "' > /etc/freeswitch/directory/%s/%s.xml " % (self.sip_domain,user.sip_user_id))
+			stdin, stdout, stderr = ssh_command("echo '" + gen_user_xml(user.sip_user_id) + "' > /etc/freeswitch/directory/%s/%s.xml " % (self.sip_domain,user.sip_user_id))
 			for line in stdout:
 				print('... ' + line.strip('\n'))
 			for line in stderr:
 				print('... ' + line.strip('\n'))
-		self.client.close()
 			
 		print('wowo')
 		
