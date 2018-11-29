@@ -80,9 +80,14 @@ class FreeswitchDomain(Document):
 				d.sip_group = self.sip_domain + '-' + d.sip_group_extension
 		super(FreeswitchDomain, self).save()
 		self.deploy()
+		sip_server = frappe.get_doc('SIP Server', self.sip_server)
+		A = sip_server.ip
+		if(sip_server.ip_public != None and sip_server.ip_public != ''):
+			A = sip_server.ip_public
+			
+		
 		dns_servers=frappe.get_all('DNS Server')
 		for server in dns_servers:
-			server = frappe.get_doc('DNS Server', server.name)
-			print(server)
-			server.add_domain(self.sip_domain,self.sip_server)
+			dns_server = frappe.get_doc('DNS Server', server.name)
+			dns_server.add_domain(self.sip_domain,A)
 		
