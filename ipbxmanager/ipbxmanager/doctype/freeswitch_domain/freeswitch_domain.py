@@ -6,18 +6,7 @@ from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
 
-def ssh_command(cmd):
-	import base64
-	import paramiko
-	key = paramiko.RSAKey.from_private_key_file("/home/frappe/.ssh/id_rsa")
-	client = paramiko.SSHClient()
-	client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-	client.connect('10.65.35.52', username='root')
-	stdin, stdout, stderr = client.exec_command(cmd)
-	client.close()
-	return stdin, stdout, stderr
-
-def gen_user_xml(i):
+def gen_user_xml(domain,i):
 	return """<domain name="%s">
 <user id="%s">
 	<params>
@@ -25,28 +14,40 @@ def gen_user_xml(i):
 	<param name="reverse-auth-pass" value="1234" />
 	</params>
 </user>
-</domain>""" % (i,i,i)
+</domain>""" % (domain,i,i)
 
 class FreeswitchDomain(Document):
+  
+	def ssh_command(self,cmd):
+		import base64
+		import paramiko
+		sip_server = frappe.get_doc('SIP Server', self.sip_server)
+		key = paramiko.RSAKey.from_private_key_file("/home/frappe/.ssh/id_rsa")
+		client = paramiko.SSHClient()
+		client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+		client.connect(sip_server.ip, username='root')
+		stdin, stdout, stderr = client.exec_command(cmd)
+		client.close()
+		return stdin, stdout, stderr
+  
 	def deploy(self):
 
-		print("Deploying...")
-		stdin, stdout, stderr = ssh_command('rm -rf /etc/freeswitch/directory/' + self.sip_domain)
-		stdin, stdout, stderr = ssh_command('mkdir -p /etc/freeswitch/directory/' + self.sip_domain)
+		print("Deploying..." + self.sip_domain)
+		stdin, stdout, stderr = self.ssh_command('rm -rf /etc/freeswitch/directory/' + self.sip_domain)
+		stdin, stdout, stderr = self.ssh_command('mkdir -p /etc/freeswitch/directory/' + self.sip_domain)
 		for line in stdout:
 			print('... ' + line.strip('\n'))
 		for line in stderr:
 			print('... ' + line.strip('\n'))
 		self.deploy_sip_users()
-		ssh_command('systemctl restart freeswitch')
+		self.ssh_command('systemctl restart freeswitch')
 		pass
 	
 	def deploy_sip_users(self):
 		users=frappe.get_all('SIP User', filters={'sip_domain': self.sip_domain}, fields=['name','sip_user_id'])
 		for user in users:
 			print(user)
-			print(gen_user_xml(user.sip_user_id))
-			stdin, stdout, stderr = ssh_command("echo '" + gen_user_xml(user.sip_user_id) + "' > /etc/freeswitch/directory/%s/%s.xml " % (self.sip_domain,user.sip_user_id))
+			stdin, stdout, stderr = self.ssh_command("echo '" + gen_user_xml(self.sip_domain,user.sip_user_id) + "' > /etc/freeswitch/directory/%s/%s.xml " % (self.sip_domain,user.sip_user_id))
 			for line in stdout:
 				print('... ' + line.strip('\n'))
 			for line in stderr:
