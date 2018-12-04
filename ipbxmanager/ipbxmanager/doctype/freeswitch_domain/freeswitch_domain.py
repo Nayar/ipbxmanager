@@ -7,14 +7,14 @@ import frappe
 from frappe.model.document import Document
 
 def gen_user_xml(domain,i):
-	return """<domain name="%s">
+	return """<include>
 <user id="%s">
 	<params>
 	<param name="reverse-auth-user" value="%s" />
-	<param name="reverse-auth-pass" value="1234" />
+	<param name="reverse-auth-pass" value="12034" />
 	</params>
 </user>
-</domain>""" % (domain,i,i)
+</include>""" % (i,i)
 
 class FreeswitchDomain(Document):
   
