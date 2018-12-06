@@ -16,6 +16,35 @@ def gen_user_xml(domain,i):
 </user>
 </include>""" % (i,i)
 
+def gen_fs_domain_xml(domain):
+	return """<include>
+  <!--the domain or ip (the right hand side of the @ in the addr-->
+  <domain name="%s">
+    <params>
+      <param name="dial-string" value="{presence_id=${dialed_user}@${dialed_domain}}${sofia_contact(${dialed_user}@${dialed_domain})}"/>
+    </params>
+ 
+    <variables>
+      <variable name="record_stereo" value="true"/>
+      <variable name="default_gateway" value="$${default_provider}"/>
+      <variable name="default_areacode" value="$${default_areacode}"/>
+      <variable name="transfer_fallback_extension" value="operator"/>
+      <variable name="user_context" value="%s"/>
+    </variables>
+ 
+    <groups>
+      <group name="%s">
+        <users>
+          <X-PRE-PROCESS cmd="include" data="%s/*.xml"/>
+        </users>
+      </group>
+ 
+    </groups>
+ 
+  </domain>
+</include>
+""" % (domain,domain,domain,domain)
+
 class FreeswitchDomain(Document):
   
 	def ssh_command(self,cmd):
@@ -34,12 +63,14 @@ class FreeswitchDomain(Document):
 
 		print("Deploying..." + self.sip_domain)
 		stdin, stdout, stderr = self.ssh_command('rm -rf /etc/freeswitch/directory/' + self.sip_domain)
+		stdin, stdout, stderr = self.ssh_command('rm -rf /etc/freeswitch/directory/' + self.sip_domain + '.xml')
 		stdin, stdout, stderr = self.ssh_command('mkdir -p /etc/freeswitch/directory/' + self.sip_domain)
 		for line in stdout:
 			print('... ' + line.strip('\n'))
 		for line in stderr:
 			print('... ' + line.strip('\n'))
 		self.deploy_sip_users()
+		self.ssh_command("echo  '%s' > /etc/freeswitch/directory/%s.xml" % (gen_fs_domain_xml(self.sip_domain),self.sip_domain))
 		self.ssh_command('systemctl restart freeswitch')
 		pass
 	
