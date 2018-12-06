@@ -38,7 +38,7 @@ file "/etc/bind/zones/%s.db";
 
 %s. IN A %s
 @ IN NS ns1.%s.
-ns1 IN A %s""" % (domain,domain,A,domain,self.ip)
+ns1 IN A %s""" % (domain,A,domain,self.ip)
 		stdin, stdout, stderr = self.ssh_command("echo '" + zone_str + "' > /etc/bind/named.conf.local")
 		stdin, stdout, stderr = self.ssh_command("echo '%s' > /etc/bind/zones/%s.db" % (zone_data,domain))
 		stdin, stdout, stderr = self.ssh_command("systemctl restart bind9 2>&1")
