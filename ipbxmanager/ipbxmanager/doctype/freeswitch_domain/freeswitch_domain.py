@@ -11,7 +11,7 @@ def gen_user_xml(domain,i):
 <user id="%s">
 	<params>
 	<param name="reverse-auth-user" value="%s" />
-	<param name="reverse-auth-pass" value="1234" />
+	<param name="reverse-auth-pass" value="12034" />
 	</params>
 </user>
 </include>""" % (i,i)
