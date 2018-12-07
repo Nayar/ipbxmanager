@@ -65,6 +65,8 @@ class FreeswitchDomain(Document):
 		stdin, stdout, stderr = self.ssh_command('rm -rf /etc/freeswitch/directory/' + self.sip_domain)
 		stdin, stdout, stderr = self.ssh_command('rm -rf /etc/freeswitch/directory/' + self.sip_domain + '.xml')
 		stdin, stdout, stderr = self.ssh_command('mkdir -p /etc/freeswitch/directory/' + self.sip_domain)
+		stdin, stdout, stderr = self.ssh_command("sed -i 's/\"ext-rtp-ip\" value=\".*\"/\"ext-rtp-ip\" value=\"%s\"/' /etc/freeswitch/sip_profiles/internal.xml" % self.A)
+		stdin, stdout, stderr = self.ssh_command("sed -i 's/\"ext-sip-ip\" value=\".*\"/\"ext-sip-ip\" value=\"%s\"/' /etc/freeswitch/sip_profiles/internal.xml" % self.A)
 		for line in stdout:
 			print('... ' + line.strip('\n'))
 		for line in stderr:
@@ -111,12 +113,13 @@ class FreeswitchDomain(Document):
 					doc.insert()
 				d.sip_group = self.sip_domain + '-' + d.sip_group_extension
 		super(FreeswitchDomain, self).save()
-		self.deploy()
 		sip_server = frappe.get_doc('SIP Server', self.sip_server)
+		
 		A = sip_server.ip
 		if(sip_server.ip_public != None and sip_server.ip_public != ''):
 			A = sip_server.ip_public
-			
+			self.A = A
+		self.deploy()	
 		
 		dns_servers=frappe.get_all('DNS Server')
 		for server in dns_servers:
