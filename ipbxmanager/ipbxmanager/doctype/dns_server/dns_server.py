@@ -26,7 +26,7 @@ type master;
 file "/etc/bind/zones/%s.db"; 
 };""" % (domain,domain)
 
-		zone_data = """$TTL 14400
+		zone_data = """$TTL 5
 @ IN SOA ns1.joolfoo.com webmaster.joolfoo.com. (
 201006601 ; Serial
 7200 ; Refresh
