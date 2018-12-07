@@ -29,10 +29,10 @@ file "/etc/bind/zones/%s.db";
 		zone_data = """$TTL 5
 @ IN SOA ns1.joolfoo.com webmaster.joolfoo.com. (
 201006601 ; Serial
-7200 ; Refresh
+5 ; Refresh
 120 ; Retry
 2419200 ; Expire
-604800) ; Default TTL
+5) ; Default TTL
 ;
 
 
