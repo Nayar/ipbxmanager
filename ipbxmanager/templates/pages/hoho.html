@@ -1,0 +1,58 @@
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+<script>
+	var vm;
+	console.log('hoho');
+	//import Vue from 'vue';
+	
+	window.onload = function() {
+		vm = new Vue({
+			el: '#form1',
+			data: {
+				custom_domain: 'no',
+				domain : '',
+				domain_placeholder:'yourcompany'
+			}
+		})
+// 		frappe.call({
+// 			method:"frappe.client.get_value",
+// 			args: {
+// 				doctype:"Delivery Note Item",
+// 				filters: {
+// 					parent:"DN00038",
+// 					item_code:"Ser/003"
+// 				},
+// 				fieldname:["qty", "stock_uom"]
+// 			}, 
+// 			callback: function(r) { 
+// 				console.log(r);
+// 
+// 				// set the returned value in a field
+// 				cur_frm.set_value(fieldname, r.message);
+// 			}
+// 		})
+	}
+</script>
+<form id='form1'>
+	<div>
+		Do you wish to use your own domain name?
+		<div class="radio">
+			<label><input type="radio" name="customdomain" v-model="custom_domain" value='yes' id='yes'>Yes</label>
+		</div>
+		<div class="radio">
+			<label><input type="radio" name="customdomain" v-model="custom_domain" value='no' id='no'>No</label>
+		</div>
+	</div>
+	
+
+	
+	<div class="form-group has-success">
+		<label class="control-label sr-only" for="inputGroupSuccess4">Input group with success</label>
+		<div class="input-group">
+			<input type="text" class="form-control" id="inputGroupSuccess4" aria-describedby="inputGroupSuccess4Status" v-model='domain' v-bind:placeholder='if()domain_placeholder'>
+			<span class="input-group-addon" v-if='custom_domain == "no"'>.pbx.jooolfoo.com</span>
+		</div>
+		<span id="inputGroupSuccess4Status" class="sr-only">(success)</span>
+	</div>
+
+</form>
