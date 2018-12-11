@@ -10,8 +10,7 @@
 			el: '#form1',
 			data: {
 				custom_domain: 'no',
-				domain : '',
-				domain_placeholder:'yourcompany'
+				domain : ''
 			}
 		})
 // 		frappe.call({
@@ -37,22 +36,36 @@
 	<div>
 		Do you wish to use your own domain name?
 		<div class="radio">
-			<label><input type="radio" name="customdomain" v-model="custom_domain" value='yes' id='yes'>Yes</label>
-		</div>
-		<div class="radio">
 			<label><input type="radio" name="customdomain" v-model="custom_domain" value='no' id='no'>No</label>
 		</div>
+		<div class="radio">
+			<label><input type="radio" name="customdomain" v-model="custom_domain" value='yes' id='yes'>Yes</label>
+		</div>
+		
 	</div>
 	
-
+	<div class="form-group has-success has-feedback" v-if='custom_domain == "yes"'>
+		<label class="control-label sr-only" for="inputSuccess5">Hidden label</label>
+		<input type="text" class="form-control" v-model='domain' id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="yourcompany.com">
+		<span v-if='domain != ""'>
+		<br/>
+		Please point {{domain}} to our name servers as follows:
+		<br/>
+			<code>
+			{{domain}}. IN NS ns1.joolfoo.com
+			</code>
+		</span>
+	</div>
 	
-	<div class="form-group has-success">
+	<div class="form-group has-success" v-if='custom_domain == "no"'>
 		<label class="control-label sr-only" for="inputGroupSuccess4">Input group with success</label>
 		<div class="input-group">
-			<input type="text" class="form-control" id="inputGroupSuccess4" aria-describedby="inputGroupSuccess4Status" v-model='domain' v-bind:placeholder='if()domain_placeholder'>
-			<span class="input-group-addon" v-if='custom_domain == "no"'>.pbx.jooolfoo.com</span>
+			<input type="text" class="form-control" id="inputGroupSuccess4" aria-describedby="inputGroupSuccess4Status" v-model='domain' placeholder="yourcompany">
+			<span class="input-group-addon" >.pbx.jooolfoo.com</span>
 		</div>
 		<span id="inputGroupSuccess4Status" class="sr-only">(success)</span>
 	</div>
+	
+	<button type="button" class="btn btn-default btn-primary" aria-label="Left Align">Place Order</button>
 
 </form>
