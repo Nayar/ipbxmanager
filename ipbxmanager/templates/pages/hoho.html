@@ -10,31 +10,37 @@
 			el: '#form1',
 			data: {
 				custom_domain: 'no',
-				domain : ''
+				domain : '',
+				company_name: ''
+			},
+			methods: {
+				place_order: function (event) {
+					//alert('wow')
+					console.log(event)
+					frappe.call({
+						method:"ipbxmanager.api.add_company",
+						args: {
+							'custom_domain': this.custom_domain,
+							'domain': this.domain,
+							'company_name' : this.company_name
+						},
+						callback: function(r) { 
+							console.log(r);
+						}
+					})
+				}
 			}
 		})
-// 		frappe.call({
-// 			method:"frappe.client.get_value",
-// 			args: {
-// 				doctype:"Delivery Note Item",
-// 				filters: {
-// 					parent:"DN00038",
-// 					item_code:"Ser/003"
-// 				},
-// 				fieldname:["qty", "stock_uom"]
-// 			}, 
-// 			callback: function(r) { 
-// 				console.log(r);
-// 
-// 				// set the returned value in a field
-// 				cur_frm.set_value(fieldname, r.message);
-// 			}
-// 		})
 	}
 </script>
 <form id='form1'>
+	<div class="form-group has-success has-feedback">
+		<label>Enter your Company Name</label>
+		<input type="text" class="form-control" v-model='company_name' id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="Company Name">
+	</div>
+
 	<div>
-		Do you wish to use your own domain name?
+		<label>Do you wish to use your own domain name?</label>
 		<div class="radio">
 			<label><input type="radio" name="customdomain" v-model="custom_domain" value='no' id='no'>No</label>
 		</div>
@@ -44,6 +50,7 @@
 		
 	</div>
 	
+	<label>Choose your domain name</label>
 	<div class="form-group has-success has-feedback" v-if='custom_domain == "yes"'>
 		<label class="control-label sr-only" for="inputSuccess5">Hidden label</label>
 		<input type="text" class="form-control" v-model='domain' id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="yourcompany.com">
@@ -66,6 +73,9 @@
 		<span id="inputGroupSuccess4Status" class="sr-only">(success)</span>
 	</div>
 	
-	<button type="button" class="btn btn-default btn-primary" aria-label="Left Align">Place Order</button>
+
+	<div class="text-center">
+		<button type="button" class="btn btn-default btn-primary" aria-label="Left Align" @click='place_order'>Place Order</button>
+	</div>
 
 </form>
