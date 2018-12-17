@@ -23,19 +23,29 @@ frappe.ui.form.on('Freeswitch Domain', {
                     {'fieldname': 'end_number', 'fieldtype': 'Int', 'label': 'Start Number', 'reqd': 1},
 						]
 						for(var i = 0; i < frm.doc.sip_groups.length; i++) {
-							myfields.push({'fieldname': frm.doc.sip_groups[i].sip_group , 'fieldtype': 'Check', 'label': frm.doc.sip_groups[i].sip_group_name + ':' +  frm.doc.sip_groups[i].sip_group_extension});
+							myfields.push({'fieldname': 'group_' + frm.doc.sip_groups[i].sip_group , 'fieldtype': 'Check', 'label': frm.doc.sip_groups[i].sip_group_name + ':' +  frm.doc.sip_groups[i].sip_group_extension});
 						}
             frappe.prompt(myfields,
                 function(values){
-                    show_alert(values, 5);
-                    console.log(values)
                     var i = 0;
+										console.log(values)
+										
+
+
+
+
                     var new_sip_user_id = values.start_number
                     while (new_sip_user_id <= values.end_number) {
                         //new_sip_user_id = start_number + i
                         if(check_sip_exists(frm.doc.sip_users,new_sip_user_id) == false){
                             var newrow = frappe.model.add_child(frm.doc, "SIP User Child", "sip_users");
-                            newrow.sip_user_id = String(new_sip_user_id)
+                            newrow.sip_user_id = String(new_sip_user_id);
+														newrow.sip_groups = '';
+														Object.keys(values).forEach(function(key,index){
+															if(key.startsWith('group_')) {
+																newrow.sip_groups += key + ', \n'
+															}
+														})
                         }
                         else {
                             //values.no_of_users_to_generate++
