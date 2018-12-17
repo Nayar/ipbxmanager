@@ -145,11 +145,7 @@ class FreeswitchDomain(Document):
 			pprint.pprint(d.name)
 			print('huju')
 			doc = frappe.get_doc(d.doctype,d.name)
-			doc.sip_group = ''
-			doc.save()
-			doc.delete()
-			pprint.pprint(doc)
-		
+			doc.delete()		
 		
 		#users = frappe.get_all('User', filters={'email': self.sip_email}, fields=['name'])
 		sip_groups = frappe.get_all('SIP Group', filters={'freeswitch_domain': self.sip_domain}, fields=['name'])

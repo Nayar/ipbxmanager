@@ -14,15 +14,18 @@ class SIPUser(Document):
 		pass
 
 	def on_update(self):
-		company = frappe.get_doc("Company",self.company)
-		doc = frappe.get_doc({
-			"doctype": "User",
-			"email" : self.sip_email,
-			"first_name" : self.sip_user_id,
-			"last_name" : self.sip_domain,
-			"new_password" : '1234a@A!'
-		})
-		doc.insert()
+		#try:
+			#doc = frappe.get_doc({
+				#"doctype": "User",
+				#"email" : self.sip_email,
+				#"first_name" : self.sip_user_id,
+				#"last_name" : self.sip_domain,
+				#"new_password" : '1234a@A!'
+			#})
+		
+			#doc.insert()
+		#except e:
+			#print('exception in create user')
 		pass
 
 	def on_trash(self):
