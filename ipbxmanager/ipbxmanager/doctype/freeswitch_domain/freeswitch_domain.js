@@ -16,13 +16,16 @@ frappe.ui.form.on('Freeswitch Domain', {
 
         frm.add_custom_button(__("Generate Users"), function(){
             console.log(frappe)
-            console.log(frm)
-            frappe.prompt([
+            console.log(frm.doc)
+						var myfields = [
                     //{'fieldname': 'no_of_users_to_generate', 'fieldtype': 'Int', 'label': 'No of users to generate', 'reqd': 1}  
                     {'fieldname': 'start_number', 'fieldtype': 'Int', 'label': 'Start Number', 'reqd': 1} ,
                     {'fieldname': 'end_number', 'fieldtype': 'Int', 'label': 'Start Number', 'reqd': 1},
-										{'fieldname': 'lol', 'fieldtype': 'Check', 'label': 'Start Number', 'reqd': 1}  
-                ],
+						]
+						for(var i = 0; i < frm.doc.sip_groups.length; i++) {
+							myfields.push({'fieldname': 'lol', 'fieldtype': 'Check', 'label': frm.doc.sip_groups[i].sip_group_name});
+						}
+            frappe.prompt(myfields,
                 function(values){
                     show_alert(values, 5);
                     console.log(values)
