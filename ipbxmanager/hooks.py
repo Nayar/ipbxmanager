@@ -35,7 +35,7 @@ app_license = "MIT"
 # ----------
 
 # application home page (will override Website Settings)
-home_page = "placeorder"
+home_page = "orderipbx"
 
 # website user home page (by Role)
 # role_home_page = {
