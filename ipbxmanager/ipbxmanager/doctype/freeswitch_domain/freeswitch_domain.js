@@ -20,7 +20,8 @@ frappe.ui.form.on('Freeswitch Domain', {
             frappe.prompt([
                     //{'fieldname': 'no_of_users_to_generate', 'fieldtype': 'Int', 'label': 'No of users to generate', 'reqd': 1}  
                     {'fieldname': 'start_number', 'fieldtype': 'Int', 'label': 'Start Number', 'reqd': 1} ,
-                    {'fieldname': 'end_number', 'fieldtype': 'Int', 'label': 'Start Number', 'reqd': 1}  
+                    {'fieldname': 'end_number', 'fieldtype': 'Int', 'label': 'Start Number', 'reqd': 1},
+										{'fieldname': 'lol', 'fieldtype': 'Check', 'label': 'Start Number', 'reqd': 1}  
                 ],
                 function(values){
                     show_alert(values, 5);
