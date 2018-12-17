@@ -23,7 +23,7 @@ frappe.ui.form.on('Freeswitch Domain', {
                     {'fieldname': 'end_number', 'fieldtype': 'Int', 'label': 'Start Number', 'reqd': 1},
 						]
 						for(var i = 0; i < frm.doc.sip_groups.length; i++) {
-							myfields.push({'fieldname': 'lol', 'fieldtype': 'Check', 'label': frm.doc.sip_groups[i].sip_group_name});
+							myfields.push({'fieldname': frm.doc.sip_groups[i].sip_group , 'fieldtype': 'Check', 'label': frm.doc.sip_groups[i].sip_group_name + ':' +  frm.doc.sip_groups[i].sip_group_extension});
 						}
             frappe.prompt(myfields,
                 function(values){
