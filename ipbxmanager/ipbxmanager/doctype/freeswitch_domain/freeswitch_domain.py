@@ -102,6 +102,13 @@ class FreeswitchDomain(Document):
 					})
 					doc.insert()
 				d.sip_user = d.sip_user_id + '@' + self.sip_domain
+				if(self.workflow_state == 'Approved' or True): # TODO: remove true on prod
+					doc = frappe.get_doc({
+						"doctype": "User",
+						"first_name" : d.sip_user_id,
+						"email" : d.sip_user_id + '@' + self.sip_domain
+					})
+					doc.insert()
 				
 			if(d.doctype == 'SIP Group Child'):
 				if not frappe.db.exists("SIP Group", self.sip_domain + '-' + d.sip_group_extension):
@@ -128,3 +135,33 @@ class FreeswitchDomain(Document):
 				dns_server = frappe.get_doc('DNS Server', server.name)
 				dns_server.add_domain(self.sip_domain,A)
 		super(FreeswitchDomain, self).save()
+		
+	def on_trash(self):
+		import pprint
+		pprint.pprint(self)
+		for d in self.get_all_children():
+			#if(d.doctype == 'SIP Group Child'):
+			print('huju')
+			pprint.pprint(d.name)
+			print('huju')
+			doc = frappe.get_doc(d.doctype,d.name)
+			doc.sip_group = ''
+			doc.save()
+			doc.delete()
+			pprint.pprint(doc)
+		
+		
+		#users = frappe.get_all('User', filters={'email': self.sip_email}, fields=['name'])
+		sip_groups = frappe.get_all('SIP Group', filters={'freeswitch_domain': self.sip_domain}, fields=['name'])
+		pprint.pprint(sip_groups)
+		for sip_group in sip_groups:
+			sip_group = frappe.get_doc("SIP Group",sip_group.name)
+			sip_group.delete()
+			
+		sip_groups = frappe.get_all('SIP User', filters={'sip_domain': self.sip_domain}, fields=['name'])
+		pprint.pprint(sip_groups)
+		for sip_group in sip_groups:
+			sip_group = frappe.get_doc("SIP User",sip_group.name)
+			sip_group.delete()
+
+		pprint.pprint('juju')
