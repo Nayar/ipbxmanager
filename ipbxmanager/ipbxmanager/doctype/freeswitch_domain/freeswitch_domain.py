@@ -102,13 +102,16 @@ class FreeswitchDomain(Document):
 					})
 					doc.insert()
 				d.sip_user = d.sip_user_id + '@' + self.sip_domain
-				if(self.workflow_state == 'Approved' or True): # TODO: remove true on prod
-					doc = frappe.get_doc({
-						"doctype": "User",
-						"first_name" : d.sip_user_id,
-						"email" : d.sip_user_id + '@' + self.sip_domain
-					})
-					doc.insert()
+				if(self.workflow_state == 'Approved' and False): # TODO: never create users for now
+					try:
+						doc = frappe.get_doc({
+							"doctype": "User",
+							"first_name" : d.sip_user_id,
+							"email" : d.sip_user_id + '@' + self.sip_domain
+						})
+						doc.insert()
+					except:
+						print('exception in adding user')
 				
 			if(d.doctype == 'SIP Group Child'):
 				if not frappe.db.exists("SIP Group", self.sip_domain + '-' + d.sip_group_extension):
