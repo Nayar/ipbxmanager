@@ -59,13 +59,5 @@ frappe.ui.form.on('Freeswitch Domain', {
                 'Generate Users'
             )
         });
-        
-        frm.set_query('SIP User', function() {
-			return {
-				filters: {
-					"shipping_rule_type": "Selling"
-				}
-			};
-        });
 	}
 });
