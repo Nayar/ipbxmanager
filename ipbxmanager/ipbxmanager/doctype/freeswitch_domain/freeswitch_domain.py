@@ -118,6 +118,7 @@ class FreeswitchDomain(Document):
 					doc = frappe.get_doc({
 						"doctype": "SIP Group",
 						"sip_extension": str(d.sip_group_extension),
+						"group_name": str(d.sip_group_name),
 						"freeswitch_domain" : self.sip_domain
 					})
 					doc.insert()
