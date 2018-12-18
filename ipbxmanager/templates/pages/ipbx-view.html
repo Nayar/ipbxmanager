@@ -4,6 +4,13 @@
 <script>
 	var vm;
 	var companies = ['fdss']
+	function dynamicPropsFn (route) {
+		const now = new Date()
+		return {
+			name: (now.getFullYear() + parseInt(route.params.years)) + '!'
+		}
+	}
+
 	
 	Vue.component('button-counter', {
 		data: function () {
@@ -35,7 +42,8 @@
 	})
 	
 	window.onload = function() {
-		const Foo = { template: '<div>foo</div>' }
+	
+		const Foo = { template: '<span>{{name}}</span>' }
 		const Bar = { template: '<div>bar</div>' }
 
 		// 2. Define some routes
@@ -44,8 +52,8 @@
 		// `Vue.extend()`, or just a component options object.
 		// We'll talk about nested routes later.
 		const routes = [
-		{ path: '/foo', component: Foo },
-		{ path: '/bar', component: Bar }
+			{ path: '/foo', component: Foo, props : dynamicPropsFn },
+			{ path: '/bar', component: Bar }
 		]
 
 		// 3. Create the router instance and pass the `routes` option
@@ -79,7 +87,6 @@
     <router-link to="/bar">Go to Bar</router-link>
 	<router-view></router-view>
 	<form id='form1'>
-		<button-counter></button-counter>
 		<list-companies v-bind:companies="companies"></list-companies>
 	</form>
 </div>
