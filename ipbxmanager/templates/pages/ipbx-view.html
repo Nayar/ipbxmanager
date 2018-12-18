@@ -23,12 +23,13 @@
 	
 	Vue.component('list-companies', {
 		props: ['companies'],
-		template: '<table class="table table-striped">\
+		template: '<div><br/><table class="table table-striped">\
 			<thead>\
 				<tr>\
 					<th>SIP Domain</th>\
 					<th>Company Name</th>\
 					<th>Company BRN</th>\
+					<th>Status</th>\
 					<th>Actions</th>\
 				</tr>\
 			</thead>\
@@ -37,10 +38,11 @@
 					<td>{% raw %}{{company.name}}{% endraw %}</td>\
 					<td>{% raw %}{{company.company_name}}{% endraw %}</td>\
 					<td>{% raw %}{{company.company_brn}}{% endraw %}</td>\
-					<td><button>View Details</button></td>\
+					<td>{% raw %}Active{% endraw %}</td>\
+					<td><button class="btn btn-success"><span class="glyphicon glyphicon-euro"></span> (20)</button> <button class="btn btn-primary"><span class="glyphicon glyphicon-cog"></span></button></td>\
 				</tr>\
 			</tbody>\
-			</table>'
+			</table><center><a href="/orderipbx"  class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></a></center></div>'
 	})
 	
 	window.onload = function() {
@@ -85,9 +87,9 @@
 	}
 </script>
 <div id='app'>
-	<router-link to="/foo">Go to Foo</router-link>
-    <router-link to="/bar">Go to Bar</router-link>
-	<router-view></router-view>
+		<router-link to="/foo">Go to Foo</router-link>
+		<router-link to="/bar">Go to Bar</router-link>
+		<router-view></router-view>
 	<form id='form1'>
 		<list-companies v-bind:companies="companies"></list-companies>
 	</form>
