@@ -20,3 +20,12 @@ def add_company(domain, company_name, custom_domain,company_brn,contact_name,con
 	})
 	doc.insert()
 	return True
+
+@frappe.whitelist(allow_guest=True)
+def get_companies():
+	sip_domains=frappe.get_all('Freeswitch Domain', filters={'contact_email': frappe.session.user}, fields=['name','company_name','contact_name'])
+	return sip_domains
+
+@frappe.whitelist(allow_guest=True)
+def current_user():
+	return frappe.session.user

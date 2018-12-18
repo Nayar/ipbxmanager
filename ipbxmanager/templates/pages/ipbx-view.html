@@ -1,0 +1,60 @@
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+<script>
+	var vm;
+	var companies = ['fdss']
+	
+	window.onload = function() {
+		vm = new Vue({
+			el: '#form1',
+			data: {
+				companies : companies
+			},
+			methods: {
+			},
+			watch: {
+			},
+			ready: function() {
+				
+			}
+		})
+		
+			frappe.call({
+				method:"ipbxmanager.api.get_companies",
+				type: 'GET',
+				callback: function(r) { 
+					console.log(r);
+					vm.companies = r.message
+				}
+			})
+	}
+</script>
+<div>
+<form id='form1'>
+	fdsfd
+	<ul>
+		<li v-for="company in companies">{% raw %}{{company}}{% endraw %}</li>
+	</ul>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Domain</th>
+				<th>Lastname</th>
+				<th>Email</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>John</td>
+				<td>Doe</td>
+				<td>john@example.com</td>
+			</tr>
+			<tr v-for="company in companies">
+				<td>{% raw %}{{company.name}}{% endraw %}</td>
+				<td>{% raw %}{{company.company_name}}{% endraw %}</td>
+				<td>{% raw %}{{company.contact_name}}{% endraw %}</td>
+			</tr>
+		<tbody>
+	</table>
+</form>
+</div>
