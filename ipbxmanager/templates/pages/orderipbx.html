@@ -11,7 +11,9 @@
 				company_name: '',
 				company_brn: '',
 				contact_email: '',
-				contact_name: ''
+				contact_name: '',
+				contact_position: '',
+				company_website: ''
 			}
 	
 	window.onload = function() {
@@ -72,6 +74,16 @@
 	<div class="form-group has-success has-feedback">
 		<label>Enter your Company BRN</label>
 		<input type="text" class="form-control" v-model='company_brn' id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="Company BRN">
+	</div>
+	
+	<div class="form-group has-success has-feedback">
+		<label>Your position at the company</label>
+		<input type="text" class="form-control" v-model='contact_position' id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="Your position at the company">
+	</div>
+	
+	<div class="form-group has-success has-feedback">
+		<label>Company Website</label>
+		<input type="text" class="form-control" v-model='company_website' id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="Your position at the company">
 	</div>
 
 	<div>
