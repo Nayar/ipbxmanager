@@ -5,52 +5,81 @@
 	var vm;
 	var companies = ['fdss']
 	
+	Vue.component('button-counter', {
+		data: function () {
+			return {
+				count: 0
+			}
+		},
+		template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+	})
+	
+	Vue.component('list-companies', {
+		props: ['companies'],
+		template: '<table class="table table-striped">\
+			<thead>\
+				<tr>\
+					<th>Firstname</th>\
+					<th>Lastname</th>\
+					<th>Email</th>\
+				</tr>\
+			</thead>\
+			<tbody>\
+				<tr v-for="company in companies">\
+					<td>{% raw %}{{company.name}}{% endraw %}</td>\
+					<td>{% raw %}{{company.company_name}}{% endraw %}</td>\
+					<td>{% raw %}{{company.company_brn}}{% endraw %}</td>\
+				</tr>\
+			</tbody>\
+			</table>'
+	})
+	
 	window.onload = function() {
+		const Foo = { template: '<div>foo</div>' }
+		const Bar = { template: '<div>bar</div>' }
+
+		// 2. Define some routes
+		// Each route should map to a component. The "component" can
+		// either be an actual component constructor created via
+		// `Vue.extend()`, or just a component options object.
+		// We'll talk about nested routes later.
+		const routes = [
+		{ path: '/foo', component: Foo },
+		{ path: '/bar', component: Bar }
+		]
+
+		// 3. Create the router instance and pass the `routes` option
+		// You can pass in additional options here, but let's
+		// keep it simple for now.
+		const router = new VueRouter({
+		routes // short for `routes: routes`
+		})
+
+		// 4. Create and mount the root instance.
+		// Make sure to inject the router with the router option to make the
+		// whole app router-aware.
 		vm = new Vue({
-			el: '#app',
-			data: {
-				companies : companies
-			},
-			methods: {
-			},
-			watch: {
-			},
-			ready: function() {
-				
+			router,
+			data: {companies: companies}
+		}).$mount('#app')
+
+		
+		frappe.call({
+			method:"ipbxmanager.api.get_companies",
+			type: 'GET',
+			callback: function(r) { 
+				console.log(r);
+				vm.companies = r.message
 			}
 		})
-		
-			frappe.call({
-				method:"ipbxmanager.api.get_companies",
-				type: 'GET',
-				callback: function(r) { 
-					console.log(r);
-					vm.companies = r.message
-				}
-			})
 	}
 </script>
 <div id='app'>
+	<router-link to="/foo">Go to Foo</router-link>
+    <router-link to="/bar">Go to Bar</router-link>
+	<router-view></router-view>
 	<form id='form1'>
-		fdsfd
-		<ul>
-			<li v-for="company in companies">{% raw %}{{company}}{% endraw %}</li>
-		</ul>
-		<table class="table table-striped">
-			<thead>
-				<tr>
-					<th>Domain</th>
-					<th>Company</th>
-					<th>BRN</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="company in companies">
-					<td>{% raw %}{{company.name}}{% endraw %}</td>
-					<td>{% raw %}{{company.company_name}}{% endraw %}</td>
-					<td>{% raw %}{{company.company_brn}}{% endraw %}</td>
-				</tr>
-			<tbody>
-		</table>
+		<button-counter></button-counter>
+		<list-companies v-bind:companies="companies"></list-companies>
 	</form>
 </div>
