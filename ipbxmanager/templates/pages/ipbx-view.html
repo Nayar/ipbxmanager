@@ -1,2 +1,130 @@
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+<script>
+	var vm;
+	var companies = ['fdss']
+	function dynamicPropsFn (route) {
+		const now = new Date()
+		return {
+			name: (now.getFullYear() + parseInt(route.params.years)) + '!'
+		}
+	}
+
+	
+	Vue.component('button-counter', {
+		data: function () {
+			return {
+				count: 0
+			}
+		},
+		template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+	})
+	
+	Vue.component('list-company', {
+		props: ['company'],
+		template: '<nav aria-label="Page navigation">\
+  <ul class="pagination">\
+		<li><a href="#">Company Details</a></li>\
+    <li><a href="#">Users</a></li>\
+    <li><a href="#">Groups</a></li>\
+    <li><a href="#">IVR</a></li>\
+    <li><a href="#">PBX Settings</a></li>\
+  </ul>\
+</nav>'
+	})
+	var router;
+	window.onload = function() {
+	
+		const Foo = { template: '<span>{{name}}</span>' }
+		const Bar = { template: '<div>bar</div>' }
+
+		// 2. Define some routes
+		// Each route should map to a component. The "component" can
+		// either be an actual component constructor created via
+		// `Vue.extend()`, or just a component options object.
+		// We'll talk about nested routes later.
+		const routes = [
+			{ path: '/foo', component: Foo, props : dynamicPropsFn },
+			{ path: '/bar', component: Bar }
+		]
+
+		// 3. Create the router instance and pass the `routes` option
+		// You can pass in additional options here, but let's
+		// keep it simple for now.
+		router = new VueRouter({
+		routes // short for `routes: routes`
+		})
+
+		// 4. Create and mount the root instance.
+		// Make sure to inject the router with the router option to make the
+		// whole app router-aware.
+		vm = new Vue({
+			router,
+			data: {companies: companies}
+		}).$mount('#app')
+
+		
+		frappe.call({
+			method:"ipbxmanager.api.get_companies",
+			type: 'GET',
+			callback: function(r) { 
+				console.log(r);
+				vm.companies = r.message
+			}
+		})
+	}
+</script>
+
+<div class="page-container" id="app" 
+   data-path="website-with-sidebar" data-doctype="Web Page">
+  <div class="sidebar-block">
+    <div class="web-sidebar">
+      <div class="sidebar-items">
+        <ul class="list-unstyled">	
+						<li class="sidebar-item">
+              <a href="/orderipbx">Order IPBX</a>
+            </li>	
+            <li class="sidebar-item">
+              <a href="/ipbx">View IPBX Services</a>
+            </li>	
+<!--          <li class="sidebar-item">
+            <router-link to="/foo">Go to Foo</router-link>
+          </li>	
+          <li>
+						<router-link to="/bar">Go to Bar</router-link>
+          </li>-->
+            <li class="sidebar-item">
+              <a href="/me">My Account</a>
+            </li>	
+          </ul>
+        </div>
+      </div> 
+    </div>
+    <div class="page-content with-sidebar">
+      <div class="page-content-wrapper">
+        <div class="row page-head">
+          <div class='col-sm-12'></div>
+							<div>
+									
+									<router-view></router-view>
+								<form id='form1'>
+<!-- 									<list-companies v-bind:companies="companies"></list-companies> -->
+											<list-company></list-company>
+								</form>
+							</div>
+          </div>
+        </div>
+        <div class="page_content">
+          <div class="webpage-content">
+            <article class="web-page-content" id="website-with-sidebar" style="text-align: Left">
+            </article>
+          </div>
+        </div>
+      </div>
+      <!-- sidebar ends -->
+    </div>
+  </div>
+</div> 
 
 

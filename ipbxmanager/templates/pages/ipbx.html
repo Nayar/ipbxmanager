@@ -47,8 +47,26 @@
 	
 	window.onload = function() {
 	
-		const Foo = { template: '<span>{{name}}</span>' }
-		const Bar = { template: '<div>bar</div>' }
+		const ListIPBX = { 	
+			template: '<list-companies v-bind:companies="companies"></list-companies>',
+			data () {
+				return {
+					companies: []
+				}
+			},
+			created () {
+				ziss = this
+				frappe.call({
+					method:"ipbxmanager.api.get_companies",
+					type: 'GET',
+					callback: function(r) { 
+						console.log(r);
+						ziss.companies = r.message
+					}
+				})
+			}
+		}
+		const SingleIPBX = { template: '<div>bar</div>' }
 
 		// 2. Define some routes
 		// Each route should map to a component. The "component" can
@@ -56,8 +74,8 @@
 		// `Vue.extend()`, or just a component options object.
 		// We'll talk about nested routes later.
 		const routes = [
-			{ path: '/foo', component: Foo, props : dynamicPropsFn },
-			{ path: '/bar', component: Bar }
+			{ path: '/', component: ListIPBX },
+			{ path: '/ipbx/:id', component: SingleIPBX }
 		]
 
 		// 3. Create the router instance and pass the `routes` option
@@ -74,16 +92,6 @@
 			router,
 			data: {companies: companies}
 		}).$mount('#app')
-
-		
-		frappe.call({
-			method:"ipbxmanager.api.get_companies",
-			type: 'GET',
-			callback: function(r) { 
-				console.log(r);
-				vm.companies = r.message
-			}
-		})
 	}
 </script>
 
@@ -99,10 +107,10 @@
             <li class="sidebar-item">
               <a href="/ipbx">View IPBX Services</a>
             </li>	
-<!--          <li class="sidebar-item">
-            <router-link to="/foo">Go to Foo</router-link>
+          <li class="sidebar-item">
+            <router-link to="/">List IPBXs</router-link>
           </li>	
-          <li>
+<!--          <li>
 						<router-link to="/bar">Go to Bar</router-link>
           </li>-->
             <li class="sidebar-item">
@@ -117,18 +125,8 @@
         <div class="row page-head">
           <div class='col-sm-12'></div>
 							<div>
-									
-									<router-view></router-view>
-								<form id='form1'>
-									<list-companies v-bind:companies="companies"></list-companies>
-								</form>
+								<router-view></router-view>
 							</div>
-          </div>
-        </div>
-        <div class="page_content">
-          <div class="webpage-content">
-            <article class="web-page-content" id="website-with-sidebar" style="text-align: Left">
-            </article>
           </div>
         </div>
       </div>
