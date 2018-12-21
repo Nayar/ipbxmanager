@@ -15,9 +15,10 @@
 	Vue.component('list-company', {
 		props: ['company'],
 		template: '<div>\
+			<h1>{% raw %}{{company.name}}{% endraw %}</h1>\
 			<ul class="nav nav-tabs">\
 						<li><router-link v-bind:to="\'/\' + company.name">Company Details</router-link><</li>\
-						<li><router-link v-bind:to="\'/\' + company.name + \'users\'">Users</router-link></li>\
+						<li><router-link v-bind:to="\'/\' + company.name + \'/users\'">Users</router-link></li>\
 						<li>Groups</li>\
 						<li>VR</li>\
 						<li>PBX Settings</li>\
@@ -106,7 +107,8 @@
 		// We'll talk about nested routes later.
 		const routes = [
 			{ path: '/', component: ListIPBX },
-			{ path: '/:id', component: SingleIPBX }
+			{ path: '/:id', component: SingleIPBX },
+			{ path: '/:id/users', component: SingleIPBX }
 		]
 
 		// 3. Create the router instance and pass the `routes` option
