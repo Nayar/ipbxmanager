@@ -30,5 +30,13 @@ def get_companies():
 	return sip_domains
 
 @frappe.whitelist(allow_guest=True)
+def get_company(company_name):
+	if(frappe.session.user != 'Administrator'):
+		sip_domains=frappe.get_all('Freeswitch Domain', filters={'contact_email': frappe.session.user, 'name': company_name}, fields=['name','company_name','company_brn'])
+	else:
+		sip_domains=frappe.get_all('Freeswitch Domain', filters={'name': company_name}, fields=['name','company_name','company_brn'])
+	return sip_domains[0]
+
+@frappe.whitelist(allow_guest=True)
 def current_user():
 	return frappe.session.user

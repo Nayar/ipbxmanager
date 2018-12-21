@@ -12,13 +12,23 @@
 	}
 
 	
-	Vue.component('button-counter', {
-		data: function () {
-			return {
-				count: 0
-			}
-		},
-		template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+	Vue.component('list-company', {
+		props: ['company'],
+		template: '<div>\
+			<ul class="nav nav-tabs">\
+						<li><router-link v-bind:to="\'/\' + company.name">Company Details</router-link><</li>\
+						<li><router-link v-bind:to="\'/\' + company.name + \'users\'">Users</router-link></li>\
+						<li>Groups</li>\
+						<li>VR</li>\
+						<li>PBX Settings</li>\
+						<li><router-link v-bind:to="\'/\' + company.name"><span class="glyphicon glyphicon-cog"></span></router-link></li>\
+					</ul>\
+				</nav>\
+		<div class="form-group has-success has-feedback">\
+			<label>Enter your Name</label>\
+			{% raw %}{{company.company_name}}{% endraw %}\
+			<input type="text" class="form-control" v-model=\'company.company_name\' id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="Your Name">\
+		</div></div>'
 	})
 	
 	Vue.component('list-companies', {
@@ -39,7 +49,7 @@
 					<td>{% raw %}{{company.company_name}}{% endraw %}</td>\
 					<td>{% raw %}{{company.company_brn}}{% endraw %}</td>\
 					<td>{% raw %}Active{% endraw %}</td>\
-					<td><button class="btn btn-success"><span class="glyphicon glyphicon-euro"></span> (20)</button> <button class="btn btn-primary"><span class="glyphicon glyphicon-cog"></span></button></td>\
+					<td><button class="btn btn-success"><span class="glyphicon glyphicon-euro"></span> (20)</button> <button class="btn btn-primary"><router-link v-bind:to="\'/\' + company.name"><span class="glyphicon glyphicon-cog"></span></router-link></button></td>\
 				</tr>\
 			</tbody>\
 			</table><center><a href="/orderipbx"  class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></a></center></div>'
@@ -66,7 +76,28 @@
 				})
 			}
 		}
-		const SingleIPBX = { template: '<div>bar</div>' }
+		const SingleIPBX = { 
+			template: '<list-company v-bind:company="company"></list-company>',
+			data () {
+					return {
+						company: {}
+					}
+				},
+				created () {
+					ziss = this
+					frappe.call({
+						method:"ipbxmanager.api.get_company",
+						args: {
+							company_name: this.$route.params.id
+						},
+						type: 'GET',
+						callback: function(r) { 
+							console.log(r);
+							ziss.company = r.message
+						}
+					})
+			}
+		}
 
 		// 2. Define some routes
 		// Each route should map to a component. The "component" can
@@ -75,7 +106,7 @@
 		// We'll talk about nested routes later.
 		const routes = [
 			{ path: '/', component: ListIPBX },
-			{ path: '/ipbx/:id', component: SingleIPBX }
+			{ path: '/:id', component: SingleIPBX }
 		]
 
 		// 3. Create the router instance and pass the `routes` option
