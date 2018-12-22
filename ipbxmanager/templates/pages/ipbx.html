@@ -17,12 +17,11 @@
 		template: '<div>\
 			<h1>{% raw %}{{company.name}}{% endraw %}</h1>\
 			<ul class="nav nav-tabs">\
-						<li><router-link v-bind:to="\'/\' + company.name">Company Details</router-link></li>\
-						<li><router-link v-bind:to="\'/\' + company.name + \'/users\'">Users</router-link></li>\
-						<li><router-link v-bind:to="\'/\' + company.name + \'/users\'">Groups</router-link></li>\
-						<li><router-link v-bind:to="\'/\' + company.name + \'/users\'">IVR</router-link></li>\
-						<li><router-link v-bind:to="\'/\' + company.name + \'/users\'">PBX Settings</router-link></li>\
-						<li><router-link v-bind:to="\'/\' + company.name"><span class="glyphicon glyphicon-cog"></span></router-link></li>\
+						<li><router-link v-bind:to="\'/\' + company.name"><span class="glyphicon glyphicon-info-sign"> Company Details </span></router-link></li>\
+						<li><router-link v-bind:to="\'/\' + company.name + \'/users\'"><span class="glyphicon glyphicon-user"> Users </span></router-link></li>\
+						<li><router-link v-bind:to="\'/\' + company.name + \'/users\'"><span class="glyphicon glyphicon-list-alt"> Groups </span></router-link></li>\
+						<li><router-link v-bind:to="\'/\' + company.name + \'/users\'"><span class="glyphicon glyphicon-random">  IVR </span></router-link></li>\
+						<li><router-link v-bind:to="\'/\' + company.name + \'/users\'"><span class="glyphicon glyphicon-cog"> Settings </span></router-link></li>\
 					</ul>\
 				</nav>\
 		<div class="form-group has-success has-feedback">\
