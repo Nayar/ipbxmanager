@@ -24,11 +24,8 @@
 						<li><router-link v-bind:to="\'/\' + company.name + \'/users\'"><span class="glyphicon glyphicon-cog"> Settings </span></router-link></li>\
 					</ul>\
 				</nav>\
-		<div class="form-group has-success has-feedback">\
-			<label>Enter your Name</label>\
-			{% raw %}{{company.company_name}}{% endraw %}\
-			<input type="text" class="form-control" v-model=\'company.company_name\' id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="Your Name">\
-		</div></div>'
+			<router-view></router-view>\
+		</div>'
 	})
 	
 	Vue.component('list-companies', {
@@ -98,6 +95,29 @@
 					})
 			}
 		}
+		
+		const UserList = {
+			template: '<div>Users {% raw %}{{users}}{% endraw %}</div>',
+			data () {
+					return {
+						users: []
+					}
+				},
+				created () {
+					ziss = this
+					frappe.call({
+						method:"ipbxmanager.api.get_users",
+						args: {
+							company_name: this.$route.params.id
+						},
+						type: 'GET',
+						callback: function(r) { 
+							console.log(r);
+							ziss.users = r.message
+						}
+					})
+			}
+		}
 
 		// 2. Define some routes
 		// Each route should map to a component. The "component" can
@@ -106,8 +126,14 @@
 		// We'll talk about nested routes later.
 		const routes = [
 			{ path: '/', component: ListIPBX },
-			{ path: '/:id', component: SingleIPBX },
-			{ path: '/:id/users', component: SingleIPBX }
+			{ path: '/:id', component: SingleIPBX,
+				children: [
+					{
+						path: 'users',
+						component: UserList
+					}
+				]
+			}
 		]
 
 		// 3. Create the router instance and pass the `routes` option
