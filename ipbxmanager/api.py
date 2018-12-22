@@ -46,7 +46,7 @@ def get_users(company_name):
 	print(sip_domains)
 	print(len(sip_domains))
 	if(len(sip_domains) >= 1):
-		sip_users = frappe.get_all('SIP User', filters={'sip_domain': company_name}, fields=['sip_user_id'])
+		sip_users = frappe.get_all('SIP User', filters={'sip_domain': company_name}, fields=['name','sip_user_id'])
 		return sip_users
 	return []
 
