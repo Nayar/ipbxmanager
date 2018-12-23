@@ -91,39 +91,6 @@ class FreeswitchDomain(Document):
 	def save(self):
 		print('here')
 		import pprint
-		for d in self.get_all_children():
-			if(d.doctype == 'SIP User Child'):
-				if not frappe.db.exists("SIP User", d.sip_user_id + '@' + self.sip_domain):
-					doc = frappe.get_doc({
-						"doctype": "SIP User",
-						"sip_user_id" : d.sip_user_id,
-						"sip_domain" : self.sip_domain,
-						"sip_email" : d.sip_user_id + '@' + self.sip_domain
-					})
-					doc.insert()
-				d.sip_user = d.sip_user_id + '@' + self.sip_domain
-				if(self.workflow_state == 'Approved' and False): # TODO: never create users for now
-					try:
-						doc = frappe.get_doc({
-							"doctype": "User",
-							"first_name" : d.sip_user_id,
-							"email" : d.sip_user_id + '@' + self.sip_domain
-						})
-						doc.insert()
-					except:
-						print('exception in adding user')
-				
-			if(d.doctype == 'SIP Group Child'):
-				if not frappe.db.exists("SIP Group", self.sip_domain + '-' + d.sip_group_extension):
-					doc = frappe.get_doc({
-						"doctype": "SIP Group",
-						"sip_extension": str(d.sip_group_extension),
-						"group_name": str(d.sip_group_name),
-						"freeswitch_domain" : self.sip_domain
-					})
-					doc.insert()
-				d.sip_group = self.sip_domain + '-' + d.sip_group_extension
-
 		if(self.workflow_state == 'Approved'):
 			#pprint.pprint(vars(self))
 			sip_server = frappe.get_doc('SIP Server', self.sip_server)
@@ -144,12 +111,8 @@ class FreeswitchDomain(Document):
 		import pprint
 		pprint.pprint(self)
 		for d in self.get_all_children():
-			#if(d.doctype == 'SIP Group Child'):
-			print('huju')
-			pprint.pprint(d.name)
-			print('huju')
 			doc = frappe.get_doc(d.doctype,d.name)
-			doc.delete()		
+			doc.delete()	
 		
 		#users = frappe.get_all('User', filters={'email': self.sip_email}, fields=['name'])
 		sip_groups = frappe.get_all('SIP Group', filters={'freeswitch_domain': self.sip_domain}, fields=['name'])
