@@ -182,9 +182,9 @@
 			<ul class="nav nav-tabs">\
 						<li><router-link v-bind:to="\'/\' + company.name"><span class="glyphicon glyphicon-info-sign"> Company Details </span></router-link></li>\
 						<li><router-link v-bind:to="\'/\' + company.name + \'/users\'"><span class="glyphicon glyphicon-user"> Users </span></router-link></li>\
-						<li><router-link v-bind:to="\'/\' + company.name + \'/users\'"><span class="glyphicon glyphicon-list-alt"> Groups </span></router-link></li>\
-						<li><router-link v-bind:to="\'/\' + company.name + \'/users\'"><span class="glyphicon glyphicon-random">  IVR </span></router-link></li>\
-						<li><router-link v-bind:to="\'/\' + company.name + \'/users\'"><span class="glyphicon glyphicon-cog"> Settings </span></router-link></li>\
+						<li><router-link v-bind:to="\'/\' + company.name + \'/groups\'"><span class="glyphicon glyphicon-list-alt"> Groups </span></router-link></li>\
+						<li><router-link v-bind:to="\'/\' + company.name + \'/ivrs\'"><span class="glyphicon glyphicon-random">  IVR </span></router-link></li>\
+						<li><router-link v-bind:to="\'/\' + company.name + \'/settings\'"><span class="glyphicon glyphicon-cog"> Settings </span></router-link></li>\
 					</ul>\
 				</nav>\
 			<router-view></router-view>\
@@ -290,7 +290,7 @@
 					}
 				},
 				created () {
-					ziss = this
+					var ziss = this
 					frappe.call({
 						method:"ipbxmanager.api.get_users",
 						args: {
@@ -321,6 +321,70 @@
 				}
 			}
 		}
+		
+		const GroupList = {
+			template: '<div>\
+			<div><br/><table class="table table-striped">\
+			<thead>\
+				<tr>\
+					<th>Group ID</th>\
+					<th>Extension</th>\
+					<th>Actions</th>\
+				</tr>\
+			</thead>\
+			<tbody>\
+				<tr v-for="item in groups">\
+					<td>{% raw %}{{item.name}}{% endraw %}</td>\
+					<td>{% raw %}{{item.group_name}}{% endraw %}</td>\
+					<td>{% raw %}{{item.sip_extension}}{% endraw %}</td>\
+					<td>\
+						<!--<button class="btn btn-primary"><span class="glyphicon glyphicon-cog"></span></button>-->\
+						<button class="btn btn-danger" @click="delete_user(user.name)"><span class="glyphicon glyphicon glyphicon-minus"></span></button>\
+					</td>\
+				</tr>\
+			</tbody>\
+			</table><center><a href="#" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span></a></center>\
+			<!-- Button trigger modal -->\
+			<user-add-modal></user-add-modal>\
+</div>\
+			</div>',
+			data () {
+					return {
+						groups: []
+					}
+				},
+				created () {
+					var ziss = this
+					frappe.call({
+						method:"ipbxmanager.api.get_groups",
+						args: {
+							company_name: this.$route.params.id
+						},
+						type: 'GET',
+						callback: function(r) { 
+							console.log(r);
+							ziss.groups = r.message
+						}
+					})
+			},
+			methods: {
+				delete_group: function(name) {
+					//alert(name)
+					frappe.call({
+						method:"ipbxmanager.api.delete_sip_group",
+						args: {
+							company_name: this.$route.params.id,
+							sip_group: name
+						},
+						type: 'DELETE',
+						callback: function(r) { 
+							console.log(r)
+							alert('Group deleted')
+						}
+					})
+				}
+			}
+		}
 
 		// 2. Define some routes
 		// Each route should map to a component. The "component" can
@@ -337,6 +401,10 @@
 					{
 						path: 'users',
 						component: UserList
+					},
+					{
+						path: 'groups',
+						component: GroupList
 					}
 				]
 			}
