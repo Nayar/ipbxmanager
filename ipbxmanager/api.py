@@ -1,4 +1,5 @@
 import frappe
+import pprint
 
 @frappe.whitelist(allow_guest=True)
 def domain_valid(domain):
@@ -56,11 +57,9 @@ def delete_sip_user(company_name,sip_user):
 		sip_domains=frappe.get_all('Freeswitch Domain', filters={'contact_email': frappe.session.user, 'name': company_name}, fields=['name','company_name','company_brn'])
 	else:
 		sip_domains=frappe.get_all('Freeswitch Domain', filters={'name': company_name}, fields=['name','company_name','company_brn'])
-	print(sip_domains)
-	print(len(sip_domains))
 	if(len(sip_domains) >= 1):
-		user = frappe.get_doc('SIP User', sip_user)
-		user.delete()
+		user = frappe.delete_doc('SIP User', sip_user)
+		frappe.db.commit()
 	return True
 
 @frappe.whitelist(allow_guest=True)
