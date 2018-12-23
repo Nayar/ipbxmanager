@@ -97,7 +97,27 @@
 		}
 		
 		const UserList = {
-			template: '<div>Users {% raw %}{{users}}{% endraw %}</div>',
+			template: '<div>\
+			<div><br/><table class="table table-striped">\
+			<thead>\
+				<tr>\
+					<th>User ID</th>\
+					<th>Extension</th>\
+					<th>Actions</th>\
+				</tr>\
+			</thead>\
+			<tbody>\
+				<tr v-for="user in users">\
+					<td>{% raw %}{{user.name}}{% endraw %}</td>\
+					<td>{% raw %}{{user.sip_user_id}}{% endraw %}</td>\
+					<td>\
+						<!--<button class="btn btn-primary"><span class="glyphicon glyphicon-cog"></span></button>-->\
+						<button class="btn btn-danger"><span class="glyphicon glyphicon glyphicon-minus"></span></button>\
+					</td>\
+				</tr>\
+			</tbody>\
+			</table><center><a href="#" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></a></center></div>\
+			</div>',
 			data () {
 					return {
 						users: []
