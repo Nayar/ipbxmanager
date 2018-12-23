@@ -20,7 +20,7 @@ app_license = "MIT"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/ipbxmanager/css/ipbxmanager.css"
-web_include_js = "/assets/ipbxmanager/js/lol.js"
+# web_include_js = "/assets/ipbxmanager/js/lol.js"
 
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
