@@ -188,6 +188,7 @@
 					</ul>\
 				</nav>\
 			<router-view></router-view>\
+			<span>No of SIP Accounts: 0/5</span>\
 		</div>'
 	})
 	
@@ -391,6 +392,11 @@
 		// either be an actual component constructor created via
 		// `Vue.extend()`, or just a component options object.
 		// We'll talk about nested routes later.
+		
+// 		, redirect: to => { 
+// 				const { hash, params, query } = to
+// 				return '/'+params.id+'/details'}
+		
 		const routes = [
 			{ path: '/', component: ListIPBX,
 			},
@@ -404,6 +410,10 @@
 					},
 					{
 						path: 'groups',
+						component: GroupList
+					},
+					{
+						path: 'details',
 						component: GroupList
 					}
 				]
