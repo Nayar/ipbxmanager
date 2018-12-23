@@ -112,7 +112,7 @@
 					<td>{% raw %}{{user.sip_user_id}}{% endraw %}</td>\
 					<td>\
 						<!--<button class="btn btn-primary"><span class="glyphicon glyphicon-cog"></span></button>-->\
-						<button class="btn btn-danger"><span class="glyphicon glyphicon glyphicon-minus"></span></button>\
+						<button class="btn btn-danger" @click="delete_user(user.name)"><span class="glyphicon glyphicon glyphicon-minus"></span></button>\
 					</td>\
 				</tr>\
 			</tbody>\
@@ -136,6 +136,23 @@
 							ziss.users = r.message
 						}
 					})
+			},
+			methods: {
+				delete_user: function(name) {
+					//alert(name)
+					frappe.call({
+						method:"ipbxmanager.api.delete_sip_user",
+						args: {
+							company_name: this.$route.params.id,
+							sip_user: name
+						},
+						type: 'DELETE',
+						callback: function(r) { 
+							console.log(r)
+							alert('User deleted')
+						}
+					})
+				}
 			}
 		}
 

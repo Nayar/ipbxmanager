@@ -51,5 +51,18 @@ def get_users(company_name):
 	return []
 
 @frappe.whitelist(allow_guest=True)
+def delete_sip_user(company_name,sip_user):
+	if(frappe.session.user != 'Administrator'):
+		sip_domains=frappe.get_all('Freeswitch Domain', filters={'contact_email': frappe.session.user, 'name': company_name}, fields=['name','company_name','company_brn'])
+	else:
+		sip_domains=frappe.get_all('Freeswitch Domain', filters={'name': company_name}, fields=['name','company_name','company_brn'])
+	print(sip_domains)
+	print(len(sip_domains))
+	if(len(sip_domains) >= 1):
+		user = frappe.get_doc('SIP User', sip_user)
+		user.delete()
+	return True
+
+@frappe.whitelist(allow_guest=True)
 def current_user():
 	return frappe.session.user
