@@ -11,6 +11,115 @@
 		}
 	}
 	
+	company_add_form = Vue.component('company-add-form', {
+		data: function () {
+			return {
+				custom_domain: 'no',
+				domain : '',
+				company_name: '',
+				company_brn: '',
+				contact_email: '',
+				contact_name: '',
+				contact_position: '',
+				company_website: ''
+			}
+		},
+		watch: {
+				company_name: function(old,newd) {
+					this.domain = this.company_name.replace(/\s+/g, '-').toLowerCase();
+				}
+		},
+		methods: {
+			place_order: function (event) {
+					//alert('wow')
+					console.log(event)
+					var ziss=this
+					console.log(ziss)
+					frappe.call({
+						method:"ipbxmanager.api.add_company",
+						args: ziss.$data,
+						callback: function(r) { 
+							console.log(r);
+							if(r.message == true){
+								alert('Order placed');
+							}
+						}
+					})
+				}
+		},
+		template: '<form id="form1">\
+	<div class="form-group has-success has-feedback">\
+		<label>Enter your Name</label>\
+		<input type="text" class="form-control" v-model="contact_name" id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="Your Name">\
+	</div>\
+	\
+	<div class="form-group has-success has-feedback">\
+		<label>Your Email Address</label>\
+		<input type="email" class="form-control" v-model="contact_email" id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="Email">\
+	</div>\
+	\
+	<div class="form-group has-success has-feedback">\
+		<label>Enter your Company Name</label>\
+		<input type="text" class="form-control" v-model="company_name" id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="Company Name">\
+	</div>\
+	\
+	<div class="form-group has-success has-feedback">\
+		<label>Enter your Company BRN</label>\
+		<input type="text" class="form-control" v-model="company_brn" id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="Company BRN">\
+	</div>\
+	\
+	<div class="form-group has-success has-feedback">\
+		<label>Your position at the company</label>\
+		<input type="text" class="form-control" v-model="contact_position" id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="Your position at the company">\
+	</div>\
+	\
+	<div class="form-group has-success has-feedback">\
+		<label>Company Website</label>\
+		<input type="text" class="form-control" v-model="company_website" id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="Your position at the company">\
+	</div>\
+\
+	<div>\
+		<label>Do you wish to use your own domain name?</label>\
+		<div class="radio">\
+			<label><input type="radio" name="customdomain" v-model="custom_domain" value="no" id="no">No</label>\
+		</div>\
+		<div class="radio">\
+			<label><input type="radio" name="customdomain" v-model="custom_domain" value="yes" id="yes">Yes</label>\
+		</div>\
+		\
+	</div>\
+	\
+	<label>Choose your domain name</label>\
+	<div class="form-group has-success has-feedback" v-if=\'custom_domain == "yes"\'>\
+		<label class="control-label sr-only" for="inputSuccess5">Hidden label</label>\
+		<input type="text" class="form-control" v-model="domain" id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="yourcompany.com">\
+		<span v-if=\'domain != ""\'>\
+		<br/>\
+		Please point {{domain}} to our name servers as follows:\
+		<br/>\
+			<code>\
+			{{domain}}. IN NS ns1.joolfoo.com\
+			</code>\
+		</span>\
+	</div>\
+	\
+	<div class="form-group has-success" v-if=\'custom_domain == "no"\'>\
+		<label class="control-label sr-only" for="inputGroupSuccess4">Input group with success</label>\
+		<div class="input-group">\
+			<input type="text" class="form-control" id="inputGroupSuccess4" aria-describedby="inputGroupSuccess4Status" v-model="domain" placeholder="yourcompany">\
+			<span class="input-group-addon" >.pbx.jooolfoo.com</span>\
+		</div>\
+		<span id="inputGroupSuccess4Status" class="sr-only">(success)</span>\
+	</div>\
+	\
+\
+	<div class="text-center">\
+		<button type="button" class="btn btn-default btn-primary" aria-label="Left Align" @click="place_order">Place Order</button>\
+	</div>\
+\
+</form>'
+	})
+	
 	Vue.component('user-add-modal', {
 		data: function() {
 			return {
@@ -214,7 +323,10 @@
 		// `Vue.extend()`, or just a component options object.
 		// We'll talk about nested routes later.
 		const routes = [
-			{ path: '/', component: ListIPBX },
+			{ path: '/', component: ListIPBX,
+			},
+			{ path: '/order', component: company_add_form
+			},
 			{ path: '/:id', component: SingleIPBX,
 				children: [
 					{
@@ -248,15 +360,12 @@
     <div class="web-sidebar">
       <div class="sidebar-items">
         <ul class="list-unstyled">	
-						<li class="sidebar-item">
-              <a href="/orderipbx">Order IPBX</a>
-            </li>	
-            <li class="sidebar-item">
-              <a href="/ipbx">IPBX Services</a>
-            </li>	
-<!--          <li>
-						<router-link to="/bar">Go to Bar</router-link>
-          </li>-->
+            <li>
+							<router-link to="/order">Order IPBX</router-link>
+						</li>	
+						<li>
+							<router-link to="/">View IPBX Services</router-link>
+						</li>
             <li class="sidebar-item">
               <a href="/me">My Account</a>
             </li>	
