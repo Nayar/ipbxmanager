@@ -60,7 +60,7 @@ def get_groups(company_name):
 	print(sip_domains)
 	print(len(sip_domains))
 	if(len(sip_domains) >= 1):
-		sip_users = frappe.get_all('SIP Group', filters={'sip_domain': company_name}, fields=['name'])
+		sip_users = frappe.get_all('SIP Group', filters={'sip_domain': company_name}, fields=['name','group_name','sip_extension'])
 		return sip_users
 	return []
 

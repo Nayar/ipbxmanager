@@ -162,7 +162,7 @@
 				<div class="form-group has-success has-feedback">\
 					<label>Groups</label>\
 					<ul><li v-for="group in groups">\
-						{% raw %}{{ group.name }}{% endraw %}<input type="checkbox" name="groups[]" v-bind:value="group.name"/>\
+						{% raw %}{{ group.group_name }} ({{ group.sip_extension }}){% endraw %} <input type="checkbox" name="groups[]" v-bind:value="group.name"/>\
 					</li></ul>\
 				</div>\
       </div>\
