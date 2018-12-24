@@ -120,6 +120,13 @@
 </form>'
 	})
 	
+	Vue.component('view-company', {
+		props : ['company'],
+		template: '<div>\
+		<span>No of SIP Accounts: 0/5</span>\
+		</div>'
+	})
+	
 	Vue.component('user-add-modal', {
 		data: function() {
 			return {
@@ -188,7 +195,7 @@
 					</ul>\
 				</nav>\
 			<router-view></router-view>\
-			<span>No of SIP Accounts: 0/5</span>\
+			<view-company v-bind:company="company" v-if="$route.path.match(/^\\/[^\\/]*$/)"></view-company>\
 		</div>'
 	})
 	
