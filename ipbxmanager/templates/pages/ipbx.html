@@ -1,5 +1,6 @@
 <script src="/assets/js/vue.js"></script>
 <script src="/assets/js/vue-router.js"></script>
+<title>IPBX</title>
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
 <script>
 	var vm;
@@ -123,7 +124,56 @@
 	Vue.component('view-company', {
 		props : ['company'],
 		template: '<div>\
-		<span>No of SIP Accounts: 0/5</span>\
+		<span> 0/5</span>\
+		<div>\
+			<div><br/><table class="table table-striped">\
+			<tbody>\
+				<tr>\
+					<td>\
+						Package\
+					</td>\
+					<td>\
+						Free Trial <button>Upgrade</button>\
+					</td>\
+				</tr>\
+				<tr>\
+					<td>\
+						No of SIP Accounts\
+					</td>\
+					<td>\
+						2/5\
+					</td>\
+				</tr>\
+				<tr>\
+					<td>\
+						SIP Domain\
+					</td>\
+					<td>\
+						{% raw %}{{company.name}}{% endraw %}\
+					</td>\
+				</tr>\
+				<tr>\
+					<td>\
+						Company Name\
+					</td>\
+					<td>\
+						{% raw %}{{company.company_name}}{% endraw %}\
+					</td>\
+				</tr>\
+				<tr>\
+					<td>\
+						Company BRN\
+					</td>\
+					<td>\
+						{% raw %}{{company.company_brn}}{% endraw %}\
+					</td>\
+				</tr>\
+			</tbody>\
+			</table><center><a href="#" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span></a></center>\
+			<!-- Button trigger modal -->\
+			<user-add-modal></user-add-modal>\
+</div>\
+			</div>\
 		</div>'
 	})
 	
@@ -245,10 +295,11 @@
 			}
 		}
 		const SingleIPBX = { 
-			template: '<list-company v-bind:company="company"></list-company>',
+			template: '<list-company v-if="loaded" v-bind:company="company"></list-company>',
 			data () {
 					return {
-						company: {}
+						company: {},
+						loaded: false
 					}
 				},
 				created () {
@@ -262,6 +313,7 @@
 						callback: function(r) { 
 							console.log(r);
 							ziss.company = r.message
+							ziss.loaded = true
 						}
 					})
 			}
