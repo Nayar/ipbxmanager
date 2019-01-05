@@ -256,6 +256,7 @@
 					<th>SIP Domain</th>\
 					<th>Company Name</th>\
 					<th>Company BRN</th>\
+					<th>Contact Details</th>\
 					<th>Status</th>\
 					<th>Actions</th>\
 				</tr>\
@@ -265,6 +266,7 @@
 					<td>{% raw %}{{company.name}}{% endraw %}</td>\
 					<td>{% raw %}{{company.company_name}}{% endraw %}</td>\
 					<td>{% raw %}{{company.company_brn}}{% endraw %}</td>\
+					<td>{% raw %}{{company.contact_name}}<br/>{{company.contact_email}}<br/>{{company.contact_tel}}{% endraw %}</td>\
 					<td>{% raw %}Active{% endraw %}</td>\
 					<td> <router-link v-bind:to="\'/\' + company.name"><button class="btn btn-primary"><span class="glyphicon glyphicon-cog"></span></button></router-link></td>\
 				</tr>\
