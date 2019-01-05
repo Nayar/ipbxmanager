@@ -4,13 +4,7 @@
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
 <script>
 	var vm;
-	var companies = ['fdss']
-	function dynamicPropsFn (route) {
-		const now = new Date()
-		return {
-			name: (now.getFullYear() + parseInt(route.params.years)) + '!'
-		}
-	}
+	var companies = []
 	
 	company_add_form = Vue.component('company-add-form', {
 		data: function () {
@@ -159,18 +153,12 @@
 						{% raw %}{{company.company_name}}{% endraw %}\
 					</td>\
 				</tr>\
-				<tr>\
-					<td>\
-						Company BRN\
-					</td>\
-					<td>\
-						{% raw %}{{company.company_brn}}{% endraw %}\
-					</td>\
-				</tr>\
+				<tr><td>Company BRN</td><td>{% raw %}{{company.company_brn}}{% endraw %}</td></tr>\
+				<tr><td>Contact Name</td><td>{% raw %}{{company.contact_name}}{% endraw %}</td></tr>\
+				<tr><td>Contact Email</td><td>{% raw %}{{company.contact_email}}{% endraw %}</td></tr>\
+				<tr><td>Contact Telephone</td><td>{% raw %}{{company.contact_tel}}{% endraw %}</td></tr>\
 			</tbody>\
-			</table><center><a href="#" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span></a></center>\
-			<!-- Button trigger modal -->\
-			<user-add-modal></user-add-modal>\
+			</table>\
 </div>\
 			</div>\
 		</div>'
@@ -197,6 +185,45 @@
 						ziss.groups = r.message
 					}
 				})
+		},
+		template: '<!-- Modal -->\
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">\
+  <div class="modal-dialog" role="document">\
+    <div class="modal-content">\
+      <div class="modal-header">\
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\
+        <h4 class="modal-title" id="myModalLabel">Add Users</h4>\
+      </div>\
+      <div class="modal-body">\
+				<div class="form-group has-success has-feedback">\
+					<label>Start User ID</label>\
+					<input type="text" class="form-control" v-model="start_id" id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="">\
+				</div>\
+				<div class="form-group has-success has-feedback">\
+					<label>End User ID</label>\
+					<input type="text" class="form-control" v-model="end_id" id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="">\
+				</div>\
+				<div class="form-group has-success has-feedback">\
+					<label>Groups</label>\
+					<ul><li v-for="group in groups">\
+						{% raw %}{{ group.group_name }} ({{ group.sip_extension }}){% endraw %} <input type="checkbox" name="groups[]" v-bind:value="group.name"/>\
+					</li></ul>\
+				</div>\
+      </div>\
+      <div class="modal-footer">\
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\
+        <button type="button" class="btn btn-primary">Save changes</button>\
+      </div>\
+    </div>\
+  </div>\
+</div>'
+	})
+	
+		Vue.component('group-add-modal', {
+		data: function() {
+			return {
+				
+			}
 		},
 		template: '<!-- Modal -->\
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">\
@@ -406,7 +433,7 @@
 			</tbody>\
 			</table><center><a href="#" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span></a></center>\
 			<!-- Button trigger modal -->\
-			<user-add-modal></user-add-modal>\
+			<group-add-modal></group-add-modal>\
 </div>\
 			</div>',
 			data () {
