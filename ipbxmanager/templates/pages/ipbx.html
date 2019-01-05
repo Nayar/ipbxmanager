@@ -222,7 +222,29 @@
 		Vue.component('group-add-modal', {
 		data: function() {
 			return {
-				
+				group_name: '',
+				sip_extension: ''
+			}
+		},
+		methods: {
+			add_group: function() {
+				console.log(event)
+					var ziss=this
+					console.log(ziss)
+					frappe.call({
+						method:"ipbxmanager.api.add_group",
+						args: {
+							sip_domain: this.$route.params.id,
+							group_name: ziss.group_name,
+							sip_extension: ziss.sip_extension
+						},
+						callback: function(r) { 
+							console.log(r);
+							if(r.message == true || r.message.hasOwnProperty('name')){
+								alert('Group added');
+							}
+						}
+					})
 			}
 		},
 		template: '<!-- Modal -->\
@@ -231,27 +253,21 @@
     <div class="modal-content">\
       <div class="modal-header">\
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\
-        <h4 class="modal-title" id="myModalLabel">Add Users</h4>\
+        <h4 class="modal-title" id="myModalLabel">Add Group</h4>\
       </div>\
       <div class="modal-body">\
 				<div class="form-group has-success has-feedback">\
-					<label>Start User ID</label>\
-					<input type="text" class="form-control" v-model="start_id" id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="">\
+					<label>Group Name</label>\
+					<input type="text" class="form-control" v-model="group_name" id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="">\
 				</div>\
 				<div class="form-group has-success has-feedback">\
-					<label>End User ID</label>\
-					<input type="text" class="form-control" v-model="end_id" id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="">\
-				</div>\
-				<div class="form-group has-success has-feedback">\
-					<label>Groups</label>\
-					<ul><li v-for="group in groups">\
-						{% raw %}{{ group.group_name }} ({{ group.sip_extension }}){% endraw %} <input type="checkbox" name="groups[]" v-bind:value="group.name"/>\
-					</li></ul>\
+					<label>Extension</label>\
+					<input type="text" class="form-control" v-model="sip_extension" id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="">\
 				</div>\
       </div>\
       <div class="modal-footer">\
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\
-        <button type="button" class="btn btn-primary">Save changes</button>\
+        <button type="button" class="btn btn-primary" @click="add_group">Save changes</button>\
       </div>\
     </div>\
   </div>\
