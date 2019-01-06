@@ -6,6 +6,15 @@
 	var vm;
 	var companies = []
 	
+	var remove_user_from_list = function(name,arr){
+		for(var i = 0; i <= arr.length; i++) {
+			if(arr[i].name == name){
+				arr.splice(i,1)
+				return
+			}
+		}
+	}
+	
 	company_add_form = Vue.component('company-add-form', {
 		data: function () {
 			return {
@@ -192,6 +201,8 @@
 				frappe.call({
 					method:"ipbxmanager.api.add_users",
 					type: 'POST',
+					freeze: true,
+					freeze_message: "Please wait ..",
 					args: {
 						sip_domain: this.$route.params.id,
 						start_uid: ziss.start_uid,
@@ -199,6 +210,7 @@
 					},
 					callback: function(r) { 
 						console.log(r);
+						alert('Users Added')
 					}
 				})
 			}
@@ -426,7 +438,7 @@
 			},
 			methods: {
 				delete_user: function(name) {
-					//alert(name)
+					var ziss = this
 					frappe.call({
 						method:"ipbxmanager.api.delete_sip_user",
 						args: {
@@ -435,7 +447,9 @@
 						},
 						type: 'DELETE',
 						callback: function(r) { 
-							console.log(r)
+// 							console.log(r)
+// 							
+							remove_user_from_list(name,ziss.users)
 							alert('User deleted')
 						}
 					})
