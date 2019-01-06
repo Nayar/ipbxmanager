@@ -257,6 +257,7 @@
 				sip_extension: ''
 			}
 		},
+		props: ['groups'],
 		methods: {
 			add_group: function() {
 				console.log(event)
@@ -271,8 +272,8 @@
 						},
 						callback: function(r) { 
 							console.log(r);
-							if(r.message == true || r.message.hasOwnProperty('name')){
-								alert('Group added');
+							if(r.message.hasOwnProperty('name')){
+								ziss.groups.push(r.message)
 							}
 						}
 					})
@@ -481,7 +482,7 @@
 			</tbody>\
 			</table><center><a href="#" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span></a></center>\
 			<!-- Button trigger modal -->\
-			<group-add-modal></group-add-modal>\
+			<group-add-modal v-bind:groups="groups"></group-add-modal>\
 </div>\
 			</div>',
 			data () {
