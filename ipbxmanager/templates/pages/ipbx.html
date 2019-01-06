@@ -167,8 +167,8 @@
 	Vue.component('user-add-modal', {
 		data: function() {
 			return {
-				start_id: 1000,
-				end_id: 1001,
+				start_uid: 1000,
+				end_uid: 1001,
 				groups: []
 			}
 		},
@@ -186,6 +186,23 @@
 					}
 				})
 		},
+		methods: {
+			add_users: function() {
+				var ziss = this;
+				frappe.call({
+					method:"ipbxmanager.api.add_users",
+					type: 'POST',
+					args: {
+						sip_domain: this.$route.params.id,
+						start_uid: ziss.start_uid,
+						end_uid: ziss.end_uid
+					},
+					callback: function(r) { 
+						console.log(r);
+					}
+				})
+			}
+		},
 		template: '<!-- Modal -->\
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">\
   <div class="modal-dialog" role="document">\
@@ -197,11 +214,11 @@
       <div class="modal-body">\
 				<div class="form-group has-success has-feedback">\
 					<label>Start User ID</label>\
-					<input type="text" class="form-control" v-model="start_id" id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="">\
+					<input type="text" class="form-control" v-model="start_uid" id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="">\
 				</div>\
 				<div class="form-group has-success has-feedback">\
 					<label>End User ID</label>\
-					<input type="text" class="form-control" v-model="end_id" id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="">\
+					<input type="text" class="form-control" v-model="end_uid" id="inputSuccess5" aria-describedby="inputSuccess5Status" placeholder="">\
 				</div>\
 				<div class="form-group has-success has-feedback">\
 					<label>Groups</label>\
@@ -212,7 +229,7 @@
       </div>\
       <div class="modal-footer">\
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\
-        <button type="button" class="btn btn-primary">Save changes</button>\
+        <button type="button" class="btn btn-primary" @click="add_users">Save changes</button>\
       </div>\
     </div>\
   </div>\

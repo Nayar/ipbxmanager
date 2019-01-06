@@ -41,6 +41,26 @@ def add_group(sip_domain, group_name, sip_extension):
 	return False
 
 @frappe.whitelist(allow_guest=True)
+def add_users(sip_domain, start_uid, end_uid):
+	if(frappe.session.user != 'Administrator'):
+		sip_domains=frappe.get_all('Freeswitch Domain', filters={'contact_email': frappe.session.user, 'name': sip_domain}, fields=fields_company)
+	else:
+		sip_domains=frappe.get_all('Freeswitch Domain', filters={'name': sip_domain}, fields=fields_company)
+	if(len(sip_domains) >= 1):
+		start_uid = int(start_uid)
+		end_uid = int(end_uid) + 1
+		for uid in range(start_uid,end_uid):
+			doc = frappe.get_doc({
+				"doctype": "SIP User",
+				"sip_user_id": uid,
+				"sip_domain": sip_domain,
+				"sip_email": str(uid) + '@' + sip_domain
+			})
+			pprint.pprint(doc)
+			doc.insert()
+	return False
+
+@frappe.whitelist(allow_guest=True)
 def get_companies():
 	if(frappe.session.user != 'Administrator'):
 		sip_domains=frappe.get_all('Freeswitch Domain', filters={'contact_email': frappe.session.user}, fields=fields_company)
