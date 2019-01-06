@@ -48,6 +48,7 @@ def add_users(sip_domain, start_uid, end_uid):
 	else:
 		sip_domains=frappe.get_all('Freeswitch Domain', filters={'name': sip_domain}, fields=fields_company)
 	if(len(sip_domains) >= 1):
+		arr = []
 		start_uid = int(start_uid)
 		end_uid = int(end_uid) + 1
 		for uid in range(start_uid,end_uid):
@@ -58,7 +59,9 @@ def add_users(sip_domain, start_uid, end_uid):
 				"sip_email": str(uid) + '@' + sip_domain
 			})
 			pprint.pprint(doc)
+			arr.append(doc)
 			doc.insert()
+		return arr
 	return False
 
 @frappe.whitelist(allow_guest=True)

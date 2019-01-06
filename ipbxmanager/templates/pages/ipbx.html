@@ -181,6 +181,7 @@
 				groups: []
 			}
 		},
+		props: ['users'],
 		created () {
 				ziss = this
 				frappe.call({
@@ -209,8 +210,9 @@
 						end_uid: ziss.end_uid
 					},
 					callback: function(r) { 
-						console.log(r);
-						alert('Users Added')
+						for(var i = 0; i < r.message.length;i++){
+							ziss.users.push(r.message[i])
+						}
 					}
 				})
 			}
@@ -414,7 +416,7 @@
 			</tbody>\
 			</table><center><a href="#" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span></a></center>\
 			<!-- Button trigger modal -->\
-			<user-add-modal></user-add-modal>\
+			<user-add-modal v-bind:users="users"></user-add-modal>\
 </div>\
 			</div>',
 			data () {
