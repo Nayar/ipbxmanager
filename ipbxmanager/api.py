@@ -2,6 +2,7 @@ import frappe
 import pprint
 
 fields_company = ['name','company_name','company_brn','contact_name','contact_email','contact_tel']
+fields_users = ['name','sip_user_id']
 
 @frappe.whitelist(allow_guest=True)
 def domain_valid(domain):
@@ -85,7 +86,7 @@ def get_users(company_name):
 	print(sip_domains)
 	print(len(sip_domains))
 	if(len(sip_domains) >= 1):
-		sip_users = frappe.get_all('SIP User', filters={'sip_domain': company_name}, fields=['name','sip_user_id'])
+		sip_users = frappe.get_all('SIP User', filters={'sip_domain': company_name}, fields=fields_users)
 		return sip_users
 	return []
 
