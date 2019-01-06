@@ -6,7 +6,7 @@
 	var vm;
 	var companies = []
 	
-	var remove_user_from_list = function(name,arr){
+	var remove_item_from_list = function(name,arr){
 		for(var i = 0; i <= arr.length; i++) {
 			if(arr[i].name == name){
 				arr.splice(i,1)
@@ -449,7 +449,7 @@
 						callback: function(r) { 
 // 							console.log(r)
 // 							
-							remove_user_from_list(name,ziss.users)
+							remove_item_from_list(name,ziss.users)
 							alert('User deleted')
 						}
 					})
