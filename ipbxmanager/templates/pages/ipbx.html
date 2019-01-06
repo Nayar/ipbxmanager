@@ -474,7 +474,7 @@
 					<td>{% raw %}{{item.sip_extension}}{% endraw %}</td>\
 					<td>\
 						<!--<button class="btn btn-primary"><span class="glyphicon glyphicon-cog"></span></button>-->\
-						<button class="btn btn-danger" @click="delete_user(user.name)"><span class="glyphicon glyphicon glyphicon-minus"></span></button>\
+						<button class="btn btn-danger" @click="delete_group(item.name)"><span class="glyphicon glyphicon glyphicon-minus"></span></button>\
 					</td>\
 				</tr>\
 			</tbody>\
@@ -504,7 +504,7 @@
 			},
 			methods: {
 				delete_group: function(name) {
-					//alert(name)
+					var ziss = this
 					frappe.call({
 						method:"ipbxmanager.api.delete_sip_group",
 						args: {
@@ -514,6 +514,7 @@
 						type: 'DELETE',
 						callback: function(r) { 
 							console.log(r)
+							remove_item_from_list(name,ziss.groups)
 							alert('Group deleted')
 						}
 					})
