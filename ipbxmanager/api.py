@@ -22,7 +22,7 @@ def add_company(domain, company_name, custom_domain,company_brn,contact_name,con
 		'contact_position' : contact_position,
 		'company_website' : company_website
 	})
-	doc.insert()
+	doc.insert(ignore_permissions=True)
 	return True
 
 @frappe.whitelist(allow_guest=True)
@@ -38,7 +38,7 @@ def add_group(sip_domain, group_name, sip_extension):
 			"group_name": group_name,
 			"sip_domain": sip_domain
 		})
-		return doc.insert()
+		return doc.insert(ignore_permissions=True)
 	return False
 
 @frappe.whitelist(allow_guest=True)
@@ -60,7 +60,7 @@ def add_users(sip_domain, start_uid, end_uid):
 			})
 			pprint.pprint(doc)
 			arr.append(doc)
-			doc.insert()
+			doc.insert(ignore_permissions=True)
 		return arr
 	return False
 
