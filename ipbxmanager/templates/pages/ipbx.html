@@ -323,6 +323,10 @@
 		</div>'
 	})
 	
+	PageUnderConstruction = {
+		template: '<span>This page is under construction</span>'
+	}
+	
 	Vue.component('list-companies', {
 		props: ['companies'],
 		template: '<div><br/><table class="table table-striped">\
@@ -551,6 +555,14 @@
 					{
 						path: 'details',
 						component: GroupList
+					},
+					{
+						path: 'ivrs',
+						component: PageUnderConstruction
+					},
+					{
+						path: 'settings',
+						component: PageUnderConstruction
 					}
 				]
 			}
