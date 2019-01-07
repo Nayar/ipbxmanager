@@ -78,6 +78,7 @@ def get_company(company_name):
 		sip_domains=frappe.get_all('Freeswitch Domain', filters={'contact_email': frappe.session.user, 'name': company_name}, fields=fields_company)
 	else:
 		sip_domains=frappe.get_all('Freeswitch Domain', filters={'name': company_name}, fields=fields_company)
+	pprint.pprint(sip_domains)
 	return sip_domains[0]
 
 @frappe.whitelist(allow_guest=True)
@@ -113,7 +114,7 @@ def delete_sip_user(company_name,sip_user):
 	else:
 		sip_domains=frappe.get_all('Freeswitch Domain', filters={'name': company_name}, fields=fields_company)
 	if(len(sip_domains) >= 1):
-		user = frappe.delete_doc('SIP User', sip_user)
+		user = frappe.delete_doc('SIP User', sip_user,ignore_permissions=True)
 		frappe.db.commit()
 	return True
 
