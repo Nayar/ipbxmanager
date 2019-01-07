@@ -119,7 +119,7 @@ def delete_sip_user(company_name,sip_user):
 	return True
 
 @frappe.whitelist(allow_guest=True)
-def delete_sip_group(company_name,sip_group):
+def delete_sip_group(company_name,sip_group,ignore_permissions=True):
 	if(frappe.session.user != 'Administrator'):
 		sip_domains=frappe.get_all('Freeswitch Domain', filters={'contact_email': frappe.session.user, 'name': company_name}, fields=fields_company)
 	else:
