@@ -1,7 +1,7 @@
 import frappe
 import pprint
 
-fields_company = ['name','company_name','company_brn','contact_name','contact_email','contact_tel']
+fields_company = ['name','company_name','company_brn','contact_name','contact_email','contact_tel','limit_sip_groups','limit_sip_users']
 fields_users = ['name','sip_user_id']
 
 @frappe.whitelist(allow_guest=True)
