@@ -313,7 +313,7 @@
 					</ul>\
 				</nav>\
 			<router-view></router-view>\
-			<view-company v-bind:company="company" v-if="$route.path.match(/^\\/[^\\/]*$/)"></view-company>\
+			<view-company v-bind:company="company" v-if="$route.path.match(/^\\/ipbx\\/[^\\/]*$/)"></view-company>\
 		</div>'
 	})
 	
@@ -547,7 +547,7 @@
 					},
 					{
 						path: 'details',
-						component: GroupList
+						alias: ''
 					},
 					{
 						path: 'ivrs',
