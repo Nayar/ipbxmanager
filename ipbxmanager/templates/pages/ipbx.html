@@ -311,11 +311,11 @@
 		template: '<div>\
 			<h1>{% raw %}{{company.name}}{% endraw %}</h1>\
 			<ul class="nav nav-tabs">\
-						<li><router-link v-bind:to="\'/\' + company.name"><span class="glyphicon glyphicon-info-sign"> Company Details </span></router-link></li>\
-						<li><router-link v-bind:to="\'/\' + company.name + \'/users\'"><span class="glyphicon glyphicon-user"> Users </span></router-link></li>\
-						<li><router-link v-bind:to="\'/\' + company.name + \'/groups\'"><span class="glyphicon glyphicon-list-alt"> Groups </span></router-link></li>\
-						<li><router-link v-bind:to="\'/\' + company.name + \'/ivrs\'"><span class="glyphicon glyphicon-random">  IVR </span></router-link></li>\
-						<li><router-link v-bind:to="\'/\' + company.name + \'/settings\'"><span class="glyphicon glyphicon-cog"> Settings </span></router-link></li>\
+						<li><router-link v-bind:to="\'/ipbx/\' + company.name"><span class="glyphicon glyphicon-info-sign"> Company Details </span></router-link></li>\
+						<li><router-link v-bind:to="\'/ipbx/\' + company.name + \'/users\'"><span class="glyphicon glyphicon-user"> Users </span></router-link></li>\
+						<li><router-link v-bind:to="\'/ipbx/\' + company.name + \'/groups\'"><span class="glyphicon glyphicon-list-alt"> Groups </span></router-link></li>\
+						<li><router-link v-bind:to="\'/ipbx/\' + company.name + \'/ivrs\'"><span class="glyphicon glyphicon-random">  IVR </span></router-link></li>\
+						<li><router-link v-bind:to="\'/ipbx/\' + company.name + \'/settings\'"><span class="glyphicon glyphicon-cog"> Settings </span></router-link></li>\
 					</ul>\
 				</nav>\
 			<router-view></router-view>\
@@ -343,10 +343,10 @@
 					<td>{% raw %}{{company.company_brn}}{% endraw %}</td>\
 					<td>{% raw %}{{company.contact_name}}<br/>{{company.contact_email}}<br/>{{company.contact_tel}}{% endraw %}</td>\
 					<td>{% raw %}Active{% endraw %}</td>\
-					<td> <router-link v-bind:to="\'/\' + company.name"><button class="btn btn-primary"><span class="glyphicon glyphicon-cog"></span></button></router-link></td>\
+					<td> <router-link v-bind:to="\'/ipbx/\' + company.name"><button class="btn btn-primary"><span class="glyphicon glyphicon-cog"></span></button></router-link></td>\
 				</tr>\
 			</tbody>\
-			</table><center><router-link to="/order"><span class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></span></router-link></center></div>'
+			</table><center><router-link to="/ipbx/order"><span class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></span></router-link></center></div>'
 	})
 	
 	window.onload = function() {
@@ -534,11 +534,10 @@
 // 				return '/'+params.id+'/details'}
 		
 		const routes = [
-			{ path: '/', component: ListIPBX,meta: {title: 'IPBX'}
-			},
-			{ path: '/order', component: company_add_form
-			},
-			{ path: '/:id', component: SingleIPBX,
+			{ path: '/', component: ListIPBX,meta: {title: 'IPBX'}},
+			{ path: '/ipbx', component: ListIPBX,meta: {title: 'IPBX'}},
+			{ path: '/ipbx/order', component: company_add_form },
+			{ path: '/ipbx/:id', component: SingleIPBX,
 				children: [
 					{
 						path: 'users',
@@ -580,10 +579,10 @@
       <div class="sidebar-items">
         <ul class="list-unstyled">	
             <li>
-							<router-link to="/order">Order IPBX</router-link>
+							<router-link to="/ipbx/order">Order IPBX</router-link>
 						</li>	
 						<li>
-							<router-link to="/">View IPBX Services</router-link>
+							<router-link to="/ipbx/">View IPBX Services</router-link>
 						</li>
             <li class="sidebar-item">
               <a href="/me">My Account</a>
