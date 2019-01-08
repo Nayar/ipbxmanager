@@ -138,14 +138,8 @@
 						Free Trial <button class="btn btn-primary">Upgrade</button>\
 					</td>\
 				</tr>\
-				<tr>\
-					<td>\
-						No of SIP Accounts\
-					</td>\
-					<td>\
-						2/5\
-					</td>\
-				</tr>\
+				<tr><td>No of SIP Accounts</td><td>2/{% raw %}{{company.limit_sip_users}}{% endraw %}</td></tr>\
+				<tr><td>No of SIP Groups</td><td>2/{% raw %}{{company.limit_sip_groups}}{% endraw %}</td></tr>\
 				<tr>\
 					<td>\
 						SIP Domain\
@@ -322,6 +316,10 @@
 			<view-company v-bind:company="company" v-if="$route.path.match(/^\\/[^\\/]*$/)"></view-company>\
 		</div>'
 	})
+	
+	PageUnderConstruction = {
+		template: '<div class="alert alert-warning" role="alert"><span>This page is under construction</span></div>'
+	}
 	
 	Vue.component('list-companies', {
 		props: ['companies'],
@@ -550,6 +548,14 @@
 					{
 						path: 'details',
 						component: GroupList
+					},
+					{
+						path: 'ivrs',
+						component: PageUnderConstruction
+					},
+					{
+						path: 'settings',
+						component: PageUnderConstruction
 					}
 				]
 			}
