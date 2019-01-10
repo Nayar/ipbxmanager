@@ -15,6 +15,13 @@
 		}
 	}
 	
+	index = Vue.component('index', {
+		data: function () {return {}},
+		template: '<div><h1>Welcome To Uom Cloud Services</h1>\
+		\
+		</div>'
+	})
+	
 	company_add_form = Vue.component('company-add-form', {
 		data: function () {
 			return {
@@ -532,7 +539,7 @@
 // 				return '/'+params.id+'/details'}
 		
 		const routes = [
-			{ path: '/', component: ListIPBX,meta: {title: 'IPBX'}},
+			{ path: '/', component: index , meta: {title: 'IPBX'}},
 			{ path: '/ipbx', component: ListIPBX,meta: {title: 'IPBX'}},
 			{ path: '/ipbx/order', component: company_add_form },
 			{ path: '/ipbx/:id', component: SingleIPBX,
