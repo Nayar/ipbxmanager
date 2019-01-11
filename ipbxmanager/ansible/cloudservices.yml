@@ -29,6 +29,9 @@
       with_subelements: 
         - "{{ domains }}"
         - users
+    
+    - file: path=/etc/freeswitch/directory/{{ item.sip_domain }} state=directory
+      with_items: "{{ domains }}"
 
     - template:
         src: files/freeswitch/user.xml
