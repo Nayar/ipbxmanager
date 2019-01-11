@@ -29,21 +29,13 @@
     - set_fact:
         all_domains: "{{all_domains}} + [ '{{item.sip_domain}}' ]"
       with_items: "{{ domains }}"
-      
-    #- debug:
-        #msg: "{{ all_domains }}"
-    #- debug:
-        #msg: "{{ item[0] }}"
-      #with_subelements: 
-        #- "{{ domains }}"
-        #- users
     
     - name: Find /var/log all directories, exclude nginx and mysql
       find:
         paths: /etc/freeswitch/directory
-        recurse: yes
-        file_type: directory
-        excludes: 'default'
+        recurse: no
+        file_type: any
+        excludes: 'default,default.xml'
       register: files_matched
         
     
