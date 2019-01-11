@@ -30,6 +30,13 @@
         - "{{ domains }}"
         - users
     
+    - name: Find /var/log all directories, exclude nginx and mysql
+      find:
+        paths: /etc/freeswitch/directory/
+        recurse: no
+        file_type: directory
+        excludes: 'nginx,mysql'
+    
     - file: path=/etc/freeswitch/directory/{{ item.sip_domain }} state=directory
       with_items: "{{ domains }}"
 
