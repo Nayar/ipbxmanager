@@ -1,0 +1,30 @@
+---
+- hosts: bind
+  remote_user: root
+  tasks:
+    - template:
+        src: files/named.conf.local
+        dest: /etc/bind/named.conf.local
+        #validate: /usr/sbin/sshd -t -f %s
+      notify: reload bind
+      
+    - template:
+        src: files/domain.db
+        dest: "/etc/bind/zones/{{item.name}}.db"
+        validate: "named-checkzone {{item.name}} %s"
+      with_items: "{{ domains }}"
+      notify: reload bind
+
+  handlers:
+    - name: reload bind
+      service:
+        name: bind9
+        state: reloaded
+
+#- hosts: freeswitch
+  #remote_user: root
+  #tasks:
+     #- template:
+        #src: files/named.conf.local
+        #dest: /etc/bind/named.conf.local
+        ##validate: /usr/sbin/sshd -t -f %s
