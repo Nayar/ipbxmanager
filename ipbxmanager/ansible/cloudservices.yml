@@ -21,10 +21,18 @@
         name: bind9
         state: reloaded
 
-#- hosts: freeswitch
-  #remote_user: root
-  #tasks:
-     #- template:
-        #src: files/named.conf.local
-        #dest: /etc/bind/named.conf.local
-        ##validate: /usr/sbin/sshd -t -f %s
+- hosts: freeswitch
+  remote_user: root
+  tasks:
+    - debug:
+        msg: "{{ item[0] }}"
+      with_subelements: 
+        - "{{ domains }}"
+        - users
+
+    - template:
+        src: files/freeswitch/user.xml
+        dest: "/etc/freeswitch/directory/{{ item[0].sip_domain }}/{{item[1].sip_user_id}}.xml"
+      with_subelements:
+         - "{{ domains }}"
+         - users
