@@ -1,7 +1,7 @@
 <include>
-	<user id="%s">
+	<user id="{{item[1].sip_user_id}}">
 		<params>
-		<param name="reverse-auth-user" value="%s" />
+		<param name="reverse-auth-user" value="{{item[1].sip_user_id}}" />
 		<param name="reverse-auth-pass" value="12034" />
 		</params>
 	</user>
