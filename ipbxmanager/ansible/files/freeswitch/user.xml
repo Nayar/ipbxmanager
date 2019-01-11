@@ -1,0 +1,8 @@
+<include>
+	<user id="%s">
+		<params>
+		<param name="reverse-auth-user" value="%s" />
+		<param name="reverse-auth-pass" value="12034" />
+		</params>
+	</user>
+</include>
