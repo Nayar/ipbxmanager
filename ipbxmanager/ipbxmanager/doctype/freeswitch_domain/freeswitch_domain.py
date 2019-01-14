@@ -87,7 +87,7 @@ class FreeswitchDomain(Document):
 
 				dns_objs.append({
 					'name' : domain.name,
-					'a' : sip_server.public_ip if sip_server.public_ip == '' else sip_server.ip
+					'a' : sip_server.ip_public if sip_server.ip_public != '' else sip_server.ip
 				})
 				
 		
