@@ -47,6 +47,8 @@ class FreeswitchDomain(Document):
 				"hosts": {}
 			}			
 		}
+			
+		dns_objs = []
 
 		sip_servers = frappe.get_all('SIP Server')
 		for sip_server in sip_servers:
@@ -82,10 +84,17 @@ class FreeswitchDomain(Document):
 						group_obj['users'].append(re.match("(.*)@.*",group_user.sip_user).group(1))
 					domain_obj['groups'].append(group_obj)
 				obj['freeswitch']['hosts'][sip_server.ip]['domains'].append(domain_obj)
+
+				dns_objs.append({
+					'name' : domain.name,
+					'a' : sip_server.public_ip if sip_server.public_ip == '' else sip_server.ip
+				})
+				
+		
 		dns_servers = frappe.get_all('DNS Server')
 		for dns_server in dns_servers:
 			dns_server = frappe.get_doc('DNS Server',dns_server)
 			obj['bind']['hosts'][dns_server.ip] = {
-				"domains" : []
+				"domains" : dns_objs
 			}
 		return yaml.dump(obj,default_flow_style=False)
