@@ -34,7 +34,11 @@ class FreeswitchDomain(Document):
 		pprint.pprint('juju')
 	
 	def deploy(self):
-		FreeswitchDomain.ansible_yaml_host_file()
+		ansible_hosts_file = FreeswitchDomain.ansible_yaml_host_file()
+		# TODO: not make absolute
+		f=open("/home/frappe/frappe-bench/apps/ipbxmanager/ipbxmanager/ansible/hosts2.yaml","w+")
+		f.write(ansible_hosts_file)
+		f.close()
 		
 	def ansible_yaml_host_file():
 		import yaml,pprint,re
