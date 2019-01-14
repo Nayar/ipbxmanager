@@ -32,6 +32,7 @@ class FreeswitchDomain(Document):
 			sip_group.delete()
 
 		pprint.pprint('juju')
+		self.deploy()
 	
 	def deploy(self):
 		ansible_hosts_file = FreeswitchDomain.ansible_yaml_host_file()
@@ -39,6 +40,34 @@ class FreeswitchDomain(Document):
 		f=open("/home/frappe/frappe-bench/apps/ipbxmanager/ipbxmanager/ansible/hosts2.yaml","w+")
 		f.write(ansible_hosts_file)
 		f.close()
+		#stats = FreeswitchDomain.run_playbook(
+			#playbook_path='/home/frappe/frappe-bench/apps/ipbxmanager/ipbxmanager/ansible/cloudservices.yaml',
+			#hosts_path='/home/frappe/frappe-bench/apps/ipbxmanager/ipbxmanager/ansible/hosts2.yaml',
+			#key_file = '/home/frappe/.ssh/id_rsa'
+		#)
+		#print(stats)
+		bashCommand = "ansible-playbook -i /home/frappe/frappe-bench/apps/ipbxmanager/ipbxmanager/ansible/hosts2.yaml /home/frappe/frappe-bench/apps/ipbxmanager/ipbxmanager/ansible/cloudservices.yml"
+		import subprocess
+		process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+		output, error = process.communicate()
+		print(output)
+		print(error)
+		
+	def run_playbook(playbook_path, hosts_path, key_file):
+		from ansible import playbook, callbacks
+		stats = callbacks.AggregateStats()
+		playbook_cb = callbacks.PlaybookCallbacks(verbose=0)
+		runner_cb = callbacks.PlaybookRunnerCallbacks(stats, verbose=0)
+		playbook.PlayBook(
+			playbook=playbook_path,
+			host_list=hosts_path,
+			stats=stats,
+			forks=4,
+			callbacks=playbook_cb,
+			runner_callbacks=runner_cb,
+			private_key_file=key_file
+			).run()
+		return stats
 		
 	def ansible_yaml_host_file():
 		import yaml,pprint,re
