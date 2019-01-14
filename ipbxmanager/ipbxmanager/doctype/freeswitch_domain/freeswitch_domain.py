@@ -37,7 +37,7 @@ class FreeswitchDomain(Document):
 		FreeswitchDomain.ansible_yaml_host_file()
 		
 	def ansible_yaml_host_file():
-		import yaml
+		import yaml,pprint,re
 		
 		obj = {
 			"freeswitch": {
@@ -54,13 +54,34 @@ class FreeswitchDomain(Document):
 			obj['freeswitch']['hosts'][sip_server.ip] = { "domains" : [] }
 			domains = frappe.get_all('Freeswitch Domain',filters={'sip_server': sip_server.name})
 			for domain in domains:
+				domain_obj = {
+					"sip_domain" : domain.name,
+					"users" : [],
+					"groups" : []
+				}
+				
 				domain = frappe.get_doc('Freeswitch Domain',domain)
+				
 				users = frappe.get_all('SIP User',filters={'sip_domain': domain.name})
 				for user in users:
 					user = frappe.get_doc('SIP User',user)
+					domain_obj['users'].append({
+						"sip_user_id": user.sip_user_id,
+						"sip_password": user.sip_password
+					})
+					
 				groups = frappe.get_all('SIP Group',filters={'sip_domain': domain.name})
 				for group in groups:
 					group = frappe.get_doc('SIP Group',group)
-			
+					group_obj = {
+						"sip_extension" : group.sip_extension,
+						"users" : []
+					}
+					for group_user in group.get_all_children():
+						pprint.pprint(group_user)
+						group_obj['users'].append(re.match("(.*)@.*",group_user.sip_user).group(1))
+					#help(group)
+					domain_obj['groups'].append(group_obj)
+				obj['freeswitch']['hosts'][sip_server.ip]['domains'].append(domain_obj)
 		
 		return yaml.dump(obj,default_flow_style=False)
