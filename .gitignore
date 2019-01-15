@@ -4,3 +4,5 @@
 *.swp
 tags
 ipbxmanager/docs/current
+ipbxmanager/ansible/cloudservices.retry
+ipbxmanager/ansible/hosts2.yaml
