@@ -25,39 +25,74 @@
   remote_user: root
   vars:
     all_domains: []
+    managed_files: []
   tasks:
-    - set_fact:
-        all_domains: "{{all_domains}} + [ '{{item.sip_domain}}' ]"
-      with_items: "{{ domains }}"
+    #- set_fact:
+        #all_domains: "{{all_domains}} + [ '{{item.sip_domain}}' ]"
+      #with_items: "{{ domains }}"
     
-    - name: Find /var/log all directories, exclude nginx and mysql
-      find:
-        paths: /etc/freeswitch/directory
-        recurse: no
-        file_type: any
-        excludes: 'default,default.xml'
-      register: files_matched
+    #- name: Find /var/log all directories, exclude nginx and mysql
+      #find:
+        #paths: /etc/freeswitch/directory
+        #recurse: no
+        #file_type: any
+        #excludes: 'default,default.xml'
+      #register: files_matched
         
     
-    - name: Alaila
-      debug:
-        msg: "{{ item.path | basename }}"
-      with_items: "{{ files_matched.files }}"
+    #- name: Alaila
+      #debug:
+        #msg: "{{ item.path | basename }}"
+      #with_items: "{{ files_matched.files }}"
         
-    - name: remove web dir contents
-      file: 
-        path: "{{ item.path }}"
-        state: absent
-      with_items: "{{ files_matched.files }}"
-      when: item.path | basename not in all_domains
+    #- name: remove web dir contents
+      #file: 
+        #path: "{{ item.path }}"
+        #state: absent
+      #with_items: "{{ files_matched.files }}"
+      #when: item.path | basename not in all_domains
       
     
-    - file: path=/etc/freeswitch/directory/{{ item.sip_domain }} state=directory
-      with_items: "{{ domains }}"
+    #- file: path=/etc/freeswitch/directory/{{ item.sip_domain }} state=directory
+      #with_items: "{{ domains }}"
 
-    - template:
-        src: files/freeswitch/user.xml
-        dest: "/etc/freeswitch/directory/{{ item[0].sip_domain }}/{{item[1].sip_user_id}}.xml"
+    - set_fact:
+        managed_files:  "{{managed_files}} + /etc/freeswitch/directory/{{ item[0].sip_domain }}/{{item[1].sip_user_id}}.xml"
       with_subelements:
          - "{{ domains }}"
-         - users
+         - users   
+      
+    #- template:
+        #src: files/freeswitch/user.xml
+        #dest: "/etc/freeswitch/directory/{{ item[0].sip_domain }}/{{item[1].sip_user_id}}.xml"
+      #with_subelements:
+         #- "{{ domains }}"
+         #- users
+         
+    - find:
+        paths: "/etc/freeswitch/directory/{{ item.sip_domain }}"
+        patterns: "[0-9]+.xml"
+        excludes: 'default/*,default.xml'
+        use_regex: yes
+        recurse: yes
+      register: user_files
+      with_items: "{{ domains }}"
+      
+    - debug:
+        var: user_files.results
+        verbosity: 0
+        
+    - name: remove unused users
+      file: 
+        path: "{{ item.1.path }}"
+        state: absent
+      with_subelements:
+         - "{{ user_files.results }}"
+         - files  
+      when: item.1.path not in managed_files
+         
+  handlers:
+    - name: reload freeswitch
+      service:
+        name: freeswitch
+        state: reloaded
