@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
 import pprint
+from ipbxmanager.api import *
 
 class SIPUser(Document):
 	def validate(self):
@@ -26,6 +27,7 @@ class SIPUser(Document):
 			#doc.insert()
 		#except e:
 			#print('exception in create user')
+		deploy()
 		pass
 
 	def on_trash(self):
@@ -37,6 +39,7 @@ class SIPUser(Document):
 		#contact = frappe.get_doc("Contact",user.full_name)
 		#contact.delete()
 		#user.delete()
+		deploy()
 		pass
 
 
