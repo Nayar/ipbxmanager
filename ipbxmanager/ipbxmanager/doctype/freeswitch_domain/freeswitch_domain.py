@@ -8,7 +8,7 @@ from frappe.model.document import Document
 
 class FreeswitchDomain(Document):
 	def save(self):
-		self.deploy()	
+		FreeswitchDomain.deploy()	
 		super(FreeswitchDomain, self).save()
 		
 	def on_trash(self):
@@ -30,11 +30,9 @@ class FreeswitchDomain(Document):
 		for sip_group in sip_groups:
 			sip_group = frappe.get_doc("SIP User",sip_group.name)
 			sip_group.delete()
-
-		pprint.pprint('juju')
-		self.deploy()
+		FreeswitchDomain.deploy()
 	
-	def deploy(self):
+	def deploy():
 		ansible_hosts_file = FreeswitchDomain.ansible_yaml_host_file()
 		# TODO: not make absolute
 		f=open("/home/frappe/frappe-bench/apps/ipbxmanager/ipbxmanager/ansible/hosts2.yaml","w+")

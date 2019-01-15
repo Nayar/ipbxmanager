@@ -1,5 +1,6 @@
 import frappe
 import pprint
+from ipbxmanager.ipbxmanager.doctype.freeswitch_domain.freeswitch_domain import *
 
 fields_company = ['name','company_name','company_brn','contact_name','contact_email','contact_tel','limit_sip_groups','limit_sip_users']
 fields_users = ['name','sip_user_id']
@@ -132,3 +133,7 @@ def delete_sip_group(company_name,sip_group):
 @frappe.whitelist(allow_guest=True)
 def current_user():
 	return frappe.session.user
+
+@frappe.whitelist(allow_guest=True)
+def deploy():
+	FreeswitchDomain.deploy()
