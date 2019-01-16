@@ -27,6 +27,22 @@
     all_domains: []
     managed_files: []
   tasks:
+    - name: Add an Apt signing key, uses whichever key is at the URL
+      apt_key:
+        url: https://files.freeswitch.org/repo/deb/freeswitch-1.8/fsstretch-archive-keyring.asc
+        state: present
+        
+    - lineinfile:
+        path: /etc/apt/sources.list.d/freeswitch.list
+        regexp: '^deb'
+        line: 'deb http://files.freeswitch.org/repo/deb/freeswitch-1.8/ stretch main'
+        create: yes
+        
+    - name: Update repositories cache and install "foo" package
+      apt:
+        name: freeswitch-meta-all
+        update_cache: yes
+
     - set_fact:
         all_domains: "{{all_domains}} + [ '{{item.sip_domain}}' ]"
       with_items: "{{ domains }}"
