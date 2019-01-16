@@ -115,10 +115,9 @@ class FreeswitchDomain(Document):
 						group_obj['users'].append(re.match("(.*)@.*",group_user.sip_user).group(1))
 					domain_obj['groups'].append(group_obj)
 				obj['freeswitch']['hosts'][sip_server.ip]['domains'].append(domain_obj)
-
 				dns_objs.append({
 					'name' : domain.name,
-					'a' : sip_server.ip_public if sip_server.ip_public != '' else sip_server.ip
+					'a' : sip_server.ip_public if sip_server.ip_public and sip_server.ip_public != '' else sip_server.ip
 				})
 				
 		
