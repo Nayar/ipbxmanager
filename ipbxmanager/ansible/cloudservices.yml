@@ -30,6 +30,8 @@
     - set_fact:
         all_domains: "{{all_domains}} + [ '{{item.sip_domain}}' ]"
       with_items: "{{ domains }}"
+      tags:
+         - configuration
     
     - name: Find /var/log all directories, exclude nginx and mysql
       find:
@@ -38,12 +40,8 @@
         file_type: any
         excludes: 'default,default.xml'
       register: files_matched
-        
-    
-    - name: Alaila
-      debug:
-        msg: "{{ item.path | basename }}"
-      with_items: "{{ files_matched.files }}"
+      tags:
+         - configuration
         
     - name: remove web dir contents
       file: 
@@ -51,16 +49,22 @@
         state: absent
       with_items: "{{ files_matched.files }}"
       when: item.path | basename not in all_domains
+      tags:
+         - configuration
       
     
     - file: path=/etc/freeswitch/directory/{{ item.sip_domain }} state=directory
       with_items: "{{ domains }}"
+      tags:
+         - configuration
 
     - set_fact:
         managed_files:  "{{managed_files}} + /etc/freeswitch/directory/{{ item[0].sip_domain }}/{{item[1].sip_user_id}}.xml"
       with_subelements:
          - "{{ domains }}"
          - users   
+      tags:
+         - configuration
       
     - template:
         src: files/freeswitch/user.xml
@@ -68,6 +72,8 @@
       with_subelements:
          - "{{ domains }}"
          - users
+      tags:
+         - configuration
          
     - find:
         paths: "/etc/freeswitch/directory/{{ item.sip_domain }}"
@@ -77,10 +83,8 @@
         recurse: yes
       register: user_files
       with_items: "{{ domains }}"
-      
-    - debug:
-        var: user_files.results
-        verbosity: 0
+      tags:
+         - configuration
         
     - name: remove unused users
       file: 
@@ -90,6 +94,8 @@
          - "{{ user_files.results }}"
          - files  
       when: item.1.path not in managed_files
+      tags:
+         - configuration
          
   handlers:
     - name: reload freeswitch
