@@ -5,8 +5,14 @@
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
-
+from ipbxmanager.api import *
 
 
 class DNSServer(Document):
-  pass
+	def on_update(self):
+		deploy()
+		pass
+
+	def on_trash(self):
+		deploy()
+		pass
