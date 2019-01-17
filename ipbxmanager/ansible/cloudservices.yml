@@ -42,6 +42,16 @@
       apt:
         name: freeswitch-meta-all
         update_cache: yes
+        
+    - lineinfile:
+        path: /etc/freeswitch/sip_profiles/internal.xml
+        state: absent
+        regexp: '{{ item }}'
+      with_items: 
+      - force-register-domain
+      - force-subscription-domain
+      - force-register-db-domain
+      notify: restart freeswitch
 
     - set_fact:
         all_domains: "{{all_domains}} + [ '{{item.sip_domain}}' ]"
@@ -81,7 +91,16 @@
          - users   
       tags:
          - configuration
-      
+    
+    - template:
+        src: files/freeswitch/domain.xml
+        dest: "/etc/freeswitch/directory/{{ item.sip_domain }}.xml"
+      with_items:
+         - "{{ domains }}"
+      tags:
+         - configuration
+      notify: reload freeswitchs
+    
     - template:
         src: files/freeswitch/user.xml
         dest: "/etc/freeswitch/directory/{{ item[0].sip_domain }}/{{item[1].sip_user_id}}.xml"
@@ -90,6 +109,7 @@
          - users
       tags:
          - configuration
+      notify: reload freeswitch
          
     - find:
         paths: "/etc/freeswitch/directory/{{ item.sip_domain }}"
@@ -118,3 +138,7 @@
       service:
         name: freeswitch
         state: reloaded
+    - name: restart freeswitch
+      service:
+        name: freeswitch
+        state: restarted

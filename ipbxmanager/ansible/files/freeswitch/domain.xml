@@ -1,6 +1,6 @@
 <include>
   <!--the domain or ip (the right hand side of the @ in the addr-->
-  <domain name="%s">
+  <domain name="{{item.sip_domain}}">
     <params>
       <param name="dial-string" value="{presence_id=${dialed_user}@${dialed_domain}}${sofia_contact(${dialed_user}@${dialed_domain})}"/>
     </params>
@@ -14,13 +14,13 @@
     </variables>
  
     <groups>
-      <group name="%s">
+      <group name="{{item.sip_domain}}">
         <users>
-          <X-PRE-PROCESS cmd="include" data="%s/*.xml"/>
+          <X-PRE-PROCESS cmd="include" data="{{item.sip_domain}}/*.xml"/>
         </users>
       </group>
  
     </groups>
  
   </domain>
-</include> 
+</include>
