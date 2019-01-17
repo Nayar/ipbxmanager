@@ -55,6 +55,16 @@
       tags:
         - setup
       notify: restart freeswitch
+      
+    - lineinfile:
+        path: /etc/freeswitch/vars.xml
+        regexp: '(.*)<X-PRE-PROCESS cmd="set" data="default_password=.*'
+        line: '\1<X-PRE-PROCESS cmd="set" data="default_password=12698775648954563564"/>'
+        create: yes
+        backrefs: yes
+      tags:
+        - setup
+      notify: restart freeswitch
         
     - name: Update repositories cache and install "foo" package
       apt:
