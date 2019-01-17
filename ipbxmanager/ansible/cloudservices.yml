@@ -99,7 +99,7 @@
          - "{{ domains }}"
       tags:
          - configuration
-      notify: reload freeswitchs
+      notify: reload freeswitch
     
     - template:
         src: files/freeswitch/user.xml
@@ -137,7 +137,7 @@
     - name: reload freeswitch
       service:
         name: freeswitch
-        state: reloaded
+        state: restarted
     - name: restart freeswitch
       service:
         name: freeswitch
