@@ -10,7 +10,8 @@
       <variable name="default_gateway" value="$${default_provider}"/>
       <variable name="default_areacode" value="$${default_areacode}"/>
       <variable name="transfer_fallback_extension" value="operator"/>
-      <variable name="user_context" value="{{item.sip_domain}}"/>
+<!--       <variable name="user_context" value="{{item.sip_domain}}"/> -->
+	  <variable name="user_context" value="default"/>
     </variables>
  
     <groups>

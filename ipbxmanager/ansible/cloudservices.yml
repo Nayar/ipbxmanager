@@ -37,6 +37,24 @@
         regexp: '^deb'
         line: 'deb http://files.freeswitch.org/repo/deb/freeswitch-1.8/ stretch main'
         create: yes
+    
+    - lineinfile:
+        path: /etc/freeswitch/sip_profiles/internal.xml
+        regexp: '(.*)<param name="ext-rtp-ip" value=.*>'
+        line: "    <param name=\"ext-rtp-ip\" value=\"{{inventory_hostname}}\"/>"
+        create: yes
+      tags:
+        - setup
+      notify: restart freeswitch
+        
+    - lineinfile:
+        path: /etc/freeswitch/sip_profiles/internal.xml
+        regexp: '(.*)<param name="ext-sip-ip" value=.*>'
+        line: "    <param name=\"ext-sip-ip\" value=\"{{inventory_hostname}}\"/>"
+        create: yes
+      tags:
+        - setup
+      notify: restart freeswitch
         
     - name: Update repositories cache and install "foo" package
       apt:
