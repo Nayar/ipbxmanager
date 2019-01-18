@@ -27,7 +27,7 @@ class SIPUser(Document):
 			#doc.insert()
 		#except e:
 			#print('exception in create user')
-		deploy()
+		#deploy()
 		pass
 
 	def on_trash(self):
@@ -39,7 +39,7 @@ class SIPUser(Document):
 		#contact = frappe.get_doc("Contact",user.full_name)
 		#contact.delete()
 		#user.delete()
-		deploy()
+		#deploy()
 		pass
 
 

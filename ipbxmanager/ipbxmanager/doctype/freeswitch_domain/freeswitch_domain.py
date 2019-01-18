@@ -44,7 +44,7 @@ class FreeswitchDomain(Document):
 			#key_file = '/home/frappe/.ssh/id_rsa'
 		#)
 		#print(stats)
-		bashCommand = "ansible-playbook -i /home/frappe/frappe-bench/apps/ipbxmanager/ipbxmanager/ansible/hosts2.yaml /home/frappe/frappe-bench/apps/ipbxmanager/ipbxmanager/ansible/cloudservices.yml"
+		bashCommand = "ansible-playbook -i /home/frappe/frappe-bench/apps/ipbxmanager/ipbxmanager/ansible/hosts2.yaml /home/frappe/frappe-bench/apps/ipbxmanager/ipbxmanager/ansible/cloudservices.yml --tags configuration"
 		import subprocess
 		process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
 		output, error = process.communicate()
