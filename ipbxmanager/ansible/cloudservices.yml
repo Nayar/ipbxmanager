@@ -138,6 +138,17 @@
       tags:
          - configuration
       notify: reload freeswitch
+      
+    - name: Setup Dialplans
+      template:
+        src: files/freeswitch/dialplan.xml
+        dest: "/etc/freeswitch/dialplan/{{ item.sip_domain }}.xml"
+      with_items:
+         - "{{ domains }}"
+      tags:
+         - configuration
+         - dialplan
+      notify: reload freeswitch
          
     - find:
         paths: "/etc/freeswitch/directory/{{ item.sip_domain }}"

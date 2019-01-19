@@ -11,7 +11,7 @@
 -->
 <!-- http://wiki.freeswitch.org/wiki/Dialplan_XML -->
 <include>
-	<context name="ibeesmart.pbx.joolfoo.com">
+	<context name="{{item.sip_domain }}">
 		<extension name="Local_Extension">
 			<condition field="destination_number" expression="^(10[01][0-9])$">
 			<action application="export" data="dialed_extension=$1"/>
@@ -41,24 +41,23 @@
 			</condition>
 		</extension>
 		
+		{% for line in item.gsm_lines %}
 		<extension name="inbound_1">
-			<condition field="destination_number" expression="^59018277$">
-<!-- 				<action application="bridge" data="user/1002@${domain_name}"/> -->
-				<action application="bridge" data="user/1000@${domain_name}"/>
+			<condition field="destination_number" expression="^{{line.number }}$">
+				<action application="bridge" data="user/{{line.forward_to }}@${domain_name}"/>
 				<action application="answer"/>
 			</condition>
 		</extension>
 		
 		<extension name="outbound_1">
-			<condition field="destination_number" expression="^0358998203">
-				<action application="set" data="effective_caller_id_number=59018277"/>
-				<action application="set" data="effective_caller_id_name=59018277"/>
+			<condition field="destination_number" expression="^(5?[0-9]{7})$">
+				<action application="set" data="effective_caller_id_number={{line.number }}"/>
+				<action application="set" data="effective_caller_id_name={{line.number }}"/>
 				<action application="set" data="ignore_early_media=true" />
-				<action application="log" data="WAWAWAWAWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa gppoip outbound to 58998203"/>
-				<action application="bridge" data="user/59018277@ibeesmart.pbx.joolfoo.com"/>
-<!-- 				<action application="bridge" data="sofia/internal/59018277@ibeesmart.pbx.joolfoo.com"/> -->
+				<action application="bridge" data="user/{{line.number }}@ibeesmart.pbx.joolfoo.com"/>
 			</condition>
 		</extension>
+		{% endfor %}
 	</context>
 </include>
  
