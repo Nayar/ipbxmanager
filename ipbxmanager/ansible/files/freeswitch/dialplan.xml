@@ -54,7 +54,9 @@
 				<action application="set" data="effective_caller_id_number={{line.number }}"/>
 				<action application="set" data="effective_caller_id_name={{line.number }}"/>
 				<action application="set" data="ignore_early_media=true" />
-				<action application="bridge" data="user/{{line.number }}@ibeesmart.pbx.joolfoo.com"/>
+<!-- 				<action application="bridge" data="user/{{line.number }}@ibeesmart.pbx.joolfoo.com"/> -->
+<!-- 				<action application="set" data="bypass_media=true"/> -->
+				<action application="bridge" data="sofia/internal/59018277%ibeesmart.pbx.joolfoo.com^${destination_number}"/>
 			</condition>
 		</extension>
 		{% endfor %}
