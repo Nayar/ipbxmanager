@@ -9,7 +9,7 @@ from frappe.model.document import Document
 class FreeswitchDomain(Document):
 	def save(self):
 		super(FreeswitchDomain, self).save()
-		#FreeswitchDomain.deploy()	
+		FreeswitchDomain.deploy()	
 		
 	def on_trash(self):
 		import pprint
