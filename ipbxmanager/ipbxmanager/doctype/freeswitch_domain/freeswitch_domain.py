@@ -95,7 +95,8 @@ class FreeswitchDomain(Document):
 				domain_obj = {
 					"sip_domain" : domain.name,
 					"users" : [],
-					"groups" : []
+					"groups" : [],
+					"gsm_lines": []
 				}
 				
 				domain = frappe.get_doc('Freeswitch Domain',domain)
@@ -120,6 +121,15 @@ class FreeswitchDomain(Document):
 						group_obj['users'].append(re.match("(.*)@.*",group_user.sip_user).group(1))
 					domain_obj['groups'].append(group_obj)
 				obj['freeswitch']['hosts'][sip_server.ip]['domains'].append(domain_obj)
+				
+				gsm_lines = frappe.get_all('GSM SIM',filters={'sip_domain': domain.name})
+				for gsm_line in gsm_lines:
+					gsm_line = frappe.get_doc('GSM SIM',gsm_line)
+					domain_obj['gsm_lines'].append({
+						"number": gsm_line.number,
+						"forward_to": gsm_line.forward_to
+					})
+				
 				dns_objs.append({
 					'name' : domain.name,
 					'a' : sip_server.ip_public if sip_server.ip_public and sip_server.ip_public != '' else sip_server.ip
