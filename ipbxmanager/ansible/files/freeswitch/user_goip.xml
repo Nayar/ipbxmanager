@@ -1,0 +1,7 @@
+<include>
+	<user id="{{item[1].number}}">
+		<params>
+		<param name="reverse-auth-pass" value="12034" />
+		</params>
+	</user>
+</include> 

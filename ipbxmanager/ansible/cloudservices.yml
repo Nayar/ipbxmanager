@@ -119,6 +119,14 @@
          - users   
       tags:
          - configuration
+         
+    - set_fact:
+        managed_files:  "{{managed_files}} + /etc/freeswitch/directory/{{ item[0].sip_domain }}/{{item[1].number}}.xml"
+      with_subelements:
+         - "{{ domains }}"
+         - gsm_lines   
+      tags:
+         - configuration
     
     - template:
         src: files/freeswitch/domain.xml
@@ -135,6 +143,16 @@
       with_subelements:
          - "{{ domains }}"
          - users
+      tags:
+         - configuration
+      notify: reload freeswitch
+      
+    - template:
+        src: files/freeswitch/user_goip.xml
+        dest: "/etc/freeswitch/directory/{{ item[0].sip_domain }}/{{item[1].number}}.xml"
+      with_subelements:
+         - "{{ domains }}"
+         - gsm_lines
       tags:
          - configuration
       notify: reload freeswitch
