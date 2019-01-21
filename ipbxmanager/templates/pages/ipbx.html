@@ -419,11 +419,27 @@
 				<tr><td>Contact Name</td><td>{% raw %}{{company.contact_name}}{% endraw %}</td></tr>\
 				<tr><td>Contact Email</td><td>{% raw %}{{company.contact_email}}{% endraw %}</td></tr>\
 				<tr><td>Contact Telephone</td><td>{% raw %}{{company.contact_tel}}{% endraw %}</td></tr>\
+				<tr><td>Actions</td><td><button type="button" class="btn btn-primary" @click="deploy" data-dismiss="modal">Deploy Changes</button>\</td></tr>\
 			</tbody>\
 			</table>\
-</div>\
 			</div>\
-		</div>'
+			</div>\
+		</div>',
+		methods: {
+			deploy: function() {
+				var ziss = this;
+				frappe.call({
+					method:"ipbxmanager.api.deploy",
+					type: 'POST',
+					freeze: true,
+					freeze_message: "Please wait ..",
+					args: {},
+					callback: function(r) { 
+						
+					}
+				})
+			}
+		}
 	})
 	
 	Vue.component('user-add-modal', {
