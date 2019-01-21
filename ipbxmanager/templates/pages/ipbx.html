@@ -390,8 +390,15 @@
 						Free Trial <button class="btn btn-primary">Upgrade</button>\
 					</td>\
 				</tr>\
-				<tr><td>No of SIP Accounts</td><td>2/{% raw %}{{company.limit_sip_users}}{% endraw %}</td></tr>\
-				<tr><td>No of SIP Groups</td><td>2/{% raw %}{{company.limit_sip_groups}}{% endraw %}</td></tr>\
+				<tr><td>No of SIP Accounts</td><td>{% raw %}{{company.no_sip_users}}/{{company.limit_sip_users}}{% endraw %}</td></tr>\
+				<tr><td>No of SIP Groups</td><td>{% raw %}{{company.no_sip_groups}}/{{company.limit_sip_groups}}{% endraw %}</td></tr>\
+				<tr><td>GSM Lines</td><td>{% raw %}\
+				<ul>\
+					<li v-for="gsm_line in company.gsm_lines">\
+						{{company.gsm_lines[0][0]}} ({{company.gsm_lines[0][1]}}) >> {{company.gsm_lines[0][2]}}\
+					</li>\
+				</ul>\
+				{% endraw %}</td></tr>\
 				<tr>\
 					<td>\
 						SIP Domain\

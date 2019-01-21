@@ -2,7 +2,7 @@ import frappe
 import pprint
 from ipbxmanager.ipbxmanager.doctype.freeswitch_domain.freeswitch_domain import *
 
-fields_company = ['name','company_name','company_brn','contact_name','contact_email','contact_tel','limit_sip_groups','limit_sip_users']
+fields_company = ['name','sip_domain','company_name','company_brn','contact_name','contact_email','contact_tel','limit_sip_groups','limit_sip_users']
 fields_users = ['name','sip_user_id']
 
 @frappe.whitelist(allow_guest=True)
@@ -80,6 +80,8 @@ def get_company(company_name):
 	else:
 		sip_domains=frappe.get_all('Freeswitch Domain', filters={'name': company_name}, fields=fields_company)
 	pprint.pprint(sip_domains)
+	FreeswitchDomain.extra_info(sip_domains[0])
+	#sip_domains[0].lol = 'hhh'
 	return sip_domains[0]
 
 @frappe.whitelist(allow_guest=True)

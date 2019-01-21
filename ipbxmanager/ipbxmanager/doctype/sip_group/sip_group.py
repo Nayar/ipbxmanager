@@ -9,9 +9,9 @@ from ipbxmanager.api import *
 
 class SIPGroup(Document):
 	def on_update(self):
-		deploy()
+		#deploy()
 		pass
 
 	def on_trash(self):
-		deploy()
+		#deploy()
 		pass

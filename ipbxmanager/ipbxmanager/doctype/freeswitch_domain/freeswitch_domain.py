@@ -67,6 +67,11 @@ class FreeswitchDomain(Document):
 			).run()
 		return stats
 		
+	def extra_info(self):
+		self.no_sip_users = frappe.db.sql('select count(*) from `tabSIP User` where sip_domain = "%s";' % (self.sip_domain))[0][0]
+		self.no_sip_groups = frappe.db.sql('select count(*) from `tabSIP Group` where sip_domain = "%s";' % (self.sip_domain))[0][0]
+		self.gsm_lines = frappe.db.sql('select number,operator,forward_to from `tabGSM SIM` where sip_domain = "%s";' % (self.sip_domain))
+		
 	def ansible_yaml_host_file():
 		import yaml,pprint,re
 		
