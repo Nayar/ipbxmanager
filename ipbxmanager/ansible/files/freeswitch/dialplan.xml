@@ -44,7 +44,7 @@
 		{% for line in item.gsm_lines %}
 		<extension name="inbound_1">
 			<condition field="destination_number" expression="^{{line.number }}$">
-				<action application="bridge" data="user/{{line.forward_to }}@${domain_name}"/>
+				<action application="bridge" data="{{line.forward_to }}"/>
 				<action application="answer"/>
 			</condition>
 		</extension>
@@ -56,10 +56,21 @@
 				<action application="set" data="ignore_early_media=true" />
 <!-- 				<action application="bridge" data="user/{{line.number }}@ibeesmart.pbx.joolfoo.com"/> -->
 <!-- 				<action application="set" data="bypass_media=true"/> -->
-				<action application="bridge" data="sofia/internal/59018277%ibeesmart.pbx.joolfoo.com^${destination_number}"/>
+				<action application="bridge" data="sofia/internal/{{line.number }}%${domain_name}^${destination_number}"/>
 			</condition>
 		</extension>
 		{% endfor %}
+		
+		{% for group in item.groups %}
+			<extension name="{{group.group_name}}">
+			<condition field="destination_number" expression="^{{group.sip_extension }}$">
+				<action application="bridge" data="group/{{group.group_name}}@${domain_name}"/>
+				<action application="answer"/>
+			</condition>
+		</extension>
+		{% endfor %}
+		
+		
 	</context>
 </include>
  

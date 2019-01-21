@@ -114,7 +114,8 @@ class FreeswitchDomain(Document):
 					group = frappe.get_doc('SIP Group',group)
 					group_obj = {
 						"sip_extension" : group.sip_extension,
-						"users" : []
+						"users" : [],
+						"group_name": group.group_name
 					}
 					for group_user in group.get_all_children():
 						pprint.pprint(group_user)
@@ -125,9 +126,10 @@ class FreeswitchDomain(Document):
 				gsm_lines = frappe.get_all('GSM SIM',filters={'sip_domain': domain.name})
 				for gsm_line in gsm_lines:
 					gsm_line = frappe.get_doc('GSM SIM',gsm_line)
+					forward_to = frappe.get_doc(gsm_line.forward_type, gsm_line.forward_to)
 					domain_obj['gsm_lines'].append({
 						"number": gsm_line.number,
-						"forward_to": gsm_line.forward_to
+						"forward_to": 'group/%s@%s' % (forward_to.group_name,domain.name) if gsm_line.forward_type == 'SIP Group' else 'user/%s@%s' % (forward_to.sip_user_id,domain.name),
 					})
 				
 				dns_objs.append({

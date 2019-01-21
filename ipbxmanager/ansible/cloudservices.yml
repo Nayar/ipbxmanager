@@ -97,14 +97,14 @@
       tags:
          - configuration
         
-    - name: remove web dir contents
-      file: 
-        path: "{{ item.path }}"
-        state: absent
-      with_items: "{{ files_matched.files }}"
-      when: item.path | basename not in all_domains
-      tags:
-         - configuration
+    #- name: remove web dir contents
+      #file: 
+        #path: "{{ item.path }}"
+        #state: absent
+      #with_items: "{{ files_matched.files }}"
+      #when: item.path | basename not in all_domains
+      #tags:
+         #- configuration
       
     
     - file: path=/etc/freeswitch/directory/{{ item.sip_domain }} state=directory
@@ -135,6 +135,7 @@
          - "{{ domains }}"
       tags:
          - configuration
+         - directory
       notify: reload freeswitch
     
     - template:

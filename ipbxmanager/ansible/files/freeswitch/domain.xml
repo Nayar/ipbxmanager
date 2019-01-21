@@ -1,27 +1,35 @@
 <include>
   <!--the domain or ip (the right hand side of the @ in the addr-->
-  <domain name="{{item.sip_domain}}">
-    <params>
-      <param name="dial-string" value="{presence_id=${dialed_user}@${dialed_domain}}${sofia_contact(${dialed_user}@${dialed_domain})}"/>
-    </params>
- 
-    <variables>
-      <variable name="record_stereo" value="true"/>
-      <variable name="default_gateway" value="$${default_provider}"/>
-      <variable name="default_areacode" value="$${default_areacode}"/>
-      <variable name="transfer_fallback_extension" value="operator"/>
-<!--       <variable name="user_context" value="{{item.sip_domain}}"/> -->
-	  <variable name="user_context" value="{{item.sip_domain}}"/>
-    </variables>
- 
-    <groups>
-      <group name="{{item.sip_domain}}">
-        <users>
-          <X-PRE-PROCESS cmd="include" data="{{item.sip_domain}}/*.xml"/>
-        </users>
-      </group>
- 
-    </groups>
- 
-  </domain>
+	<domain name="{{item.sip_domain}}">
+		<params>
+			<param name="dial-string" value="{presence_id=${dialed_user}@${dialed_domain}}${sofia_contact(${dialed_user}@${dialed_domain})}"/>
+		</params>
+
+		<variables>
+			<variable name="record_stereo" value="true"/>
+			<variable name="default_gateway" value="$${default_provider}"/>
+			<variable name="default_areacode" value="$${default_areacode}"/>
+			<variable name="transfer_fallback_extension" value="operator"/>
+	<!--       <variable name="user_context" value="{{item.sip_domain}}"/> -->
+		<variable name="user_context" value="{{item.sip_domain}}"/>
+		</variables>
+
+		<groups>
+			<group name="{{item.sip_domain}}">
+				<users>
+					<X-PRE-PROCESS cmd="include" data="{{item.sip_domain}}/*.xml"/>
+				</users>
+			</group>
+						
+			{% for group in item.groups %}
+			<group name="{{group.group_name}}">
+				<users>
+					{% for user in group.users %}
+					<user id="{{user}}" type="pointer"/>
+					{% endfor %}
+				</users>
+			</group>
+			{% endfor %}
+		</groups>
+	</domain>
 </include>
