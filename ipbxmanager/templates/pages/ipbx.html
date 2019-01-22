@@ -587,13 +587,40 @@
 						<li><router-link v-bind:to="\'/ipbx/\' + company.name + \'/settings\'"><span class="glyphicon glyphicon-cog"> Settings </span></router-link></li>\
 					</ul>\
 				</nav>\
-			<router-view></router-view>\
+			<router-view v-bind:company="company"></router-view>\
 			<view-company v-bind:company="company" v-if="$route.path.match(/^\\/ipbx\\/[^\\/]*$/)"></view-company>\
 		</div>'
 	})
 	
 	PageUnderConstruction = {
 		template: '<div class="alert alert-warning" role="alert"><span>This page is under construction</span></div>'
+	}
+	
+	IVRList = {
+		props : ['company'],
+		template: '<div>{% raw %}\
+		<div class="alert alert-warning" role="alert"><span>This page is under construction</span></div>\
+		{{company}}\
+		<ul>\
+			<li v-for="gsm_line in company.gsm_lines">{{gsm_line[0]}} ({{gsm_line[1]}}) {{gsm_line[2]}}\
+				<div class="radio">\
+					<label>\
+						<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>\
+						Forward to User\
+					</label>\
+				</div>\
+				<div class="radio">\
+					<label>\
+						<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>\
+						Forward to Group\
+					</label>\
+				</div>\
+				<div class="form-group">\
+					<input type="text" class="form-control" id="exampleInputName2" placeholder="User/Group">\
+				</div>\
+			</li>\
+		</ul>\
+		{% endraw %}</div>'
 	}
 	
 	Vue.component('list-companies', {
@@ -826,7 +853,7 @@
 					},
 					{
 						path: 'ivrs',
-						component: PageUnderConstruction
+						component: IVRList
 					},
 					{
 						path: 'settings',
